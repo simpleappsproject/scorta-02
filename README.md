@@ -1,0 +1,22 @@
+# Simple Score
+
+App Android di **Simple Apps**: segnapunti per giochi di carte e da tavolo, con i giochi italiani già pronti.
+
+- **Libero** (qualsiasi gioco, obiettivo opzionale, "vince chi ha meno" per i giochi a penalità) e **Scopa** (carte, denari, settebello, primiera, scope) gratis.
+- **Burraco** (puliti/sporchi, carte in tavola e in mano, chiusura, pozzetto) e **Scala 40** (penalità, eliminazione a 101/151/201, rientro e raddoppio facoltativi) con **Simple Score Pro** (acquisto unico).
+- Tabellone grande, mazziere che gira da solo, correzione di qualsiasi mano, grafico dell'andamento, rivincita, storico.
+- Salvataggio automatico dopo ogni mano: chiudendo l'app non si perde nulla. Schermo sempre acceso durante la partita.
+- Offline, nessun account, nessuna pubblicità. Tema chiaro/scuro, 14 lingue.
+
+## Come provarla
+- **Nel browser del computer:** scarica il repository e apri `www/index.html` (oppure `npm run serve` e vai su http://localhost:8766).
+- **Sul telefono Android:** pagina **Actions** del repository → ultima esecuzione "Android" → in fondo, **Artifacts** → `simple-score-…-apk-prova`, estrai lo zip e installa l'APK.
+
+## Identità
+| Cosa | Valore |
+|---|---|
+| Identificativo | `it.simpleapps.score` |
+| Prodotto in-app | `score_pro` |
+| Sviluppatore | Simple Apps |
+
+Scheda dell'app e regole dei giochi con le fonti: documento `claude/idea-score.md` nel Progetto "App".

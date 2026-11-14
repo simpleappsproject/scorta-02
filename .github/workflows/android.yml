@@ -1,0 +1,50 @@
+# Compila un APK di prova di Simple Score in automatico (come per Simple Timer e Simple Finance).
+# - A ogni modifica su main e per ogni Pull Request verso main.
+# - Solo APK di prova, installabile su qualsiasi Android: nessuna chiave di firma, nessun Secret.
+# Il file si scarica dalla Pull Request (scheda Checks → Android → Summary → Artifacts)
+# oppure dalla pagina "Actions" del repository.
+name: Android
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'store/**']
+  pull_request:
+    branches: [main]
+    paths-ignore: ['**.md', 'store/**']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Versione dell'app
+        run: echo "VERSION_NAME=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+
+      - name: Installa Capacitor
+        run: npm ci
+
+      - name: Copia i file web nel progetto Android
+        run: npx cap sync android
+
+      - name: Compila APK di prova
+        working-directory: android
+        run: ./gradlew --no-daemon assembleDebug
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: simple-score-${{ env.VERSION_NAME }}-${{ github.run_number }}-apk-prova
+          path: android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14

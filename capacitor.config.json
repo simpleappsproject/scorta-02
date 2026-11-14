@@ -1,0 +1,19 @@
+{
+  "appId": "it.simpleapps.score",
+  "appName": "Simple Score",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#0b100d"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 300,
+      "backgroundColor": "#17804f",
+      "showSpinner": false
+    },
+    "SystemBars": {
+      "insetsHandling": "css"
+    }
+  }
+}
