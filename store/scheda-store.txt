@@ -1,0 +1,90 @@
+SIMPLE SCORE – TESTI PER LA SCHEDA DEL PLAY STORE (BOZZA)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store)
+Da decidere con Francesco: nome italiano sullo store e prezzo di Pro (proposta 1,99 €).
+
+==================== ITALIANO (it-IT) ====================
+
+NOME APP (max 30 caratteri)
+Simple Score: Segnapunti
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Segnapunti per Burraco, Scala 40, Scopa e ogni gioco. Senza pubblicità.
+
+DESCRIZIONE COMPLETA
+Simple Score è il segnapunti per le serate di carte e giochi da tavolo. Niente carta e penna, niente conti sbagliati, niente pubblicità a ogni punto.
+
+IL PUNTEGGIO, GRANDE E CHIARO
+Tutti i giocatori sullo schermo con numeri grandi, la posizione in classifica e chi deve fare le carte: il mazziere gira da solo a ogni mano.
+
+I GIOCHI ITALIANI GIÀ PRONTI
+• Scopa: tocca chi ha preso carte, denari, settebello e primiera, aggiungi le scope. Fatto.
+• Burraco: inserisci burraco puliti e sporchi, carte in tavola e in mano, chiusura e pozzetto: la somma la fa l'app. Si gioca a 505, 1005 o 2005.
+• Scala 40: penalità, eliminazione a 101 (o 151, 201), rientro e raddoppio se li usate.
+• Libero: per qualsiasi altro gioco, con o senza obiettivo, anche "vince chi ha meno punti".
+
+SBAGLIATO UNA MANO? SI CORREGGE
+Tocca una mano nella tabella e cambiala: tutti i totali si aggiornano. Puoi anche togliere l'ultima mano.
+
+NON PERDI NULLA
+La partita si salva dopo ogni mano: se chiudi l'app o arriva una telefonata, riprendi da dove eri. Lo schermo resta acceso durante la partita.
+
+FINE PARTITA
+Vincitore, classifica, grafico dell'andamento e rivincita con gli stessi giocatori in un tocco.
+
+NIENTE DISTRAZIONI
+Nessuna pubblicità, nessun account, nessun abbonamento. Funziona offline e i dati restano sul telefono.
+
+SIMPLE SCORE PRO
+Con un unico acquisto sblocchi:
+• Burraco e Scala 40 con il conteggio guidato
+• fino a 12 giocatori o squadre (gratis fino a 6)
+• storico completo e statistiche per giocatore (gratis le ultime 5 partite)
+• dadi virtuali e 6 colori per l'app
+
+Tema chiaro e scuro. In 14 lingue.
+
+NOTE DI RILASCIO (versione 1.0.0)
+Prima versione di Simple Score.
+
+
+==================== ENGLISH (en-US / en-GB) ====================
+
+APP NAME (max 30 characters)
+Simple Score: Score Keeper
+
+SHORT DESCRIPTION (max 80 characters)
+Score keeper for card and board games. Big numbers, no ads, works offline.
+
+FULL DESCRIPTION
+Simple Score keeps the score on game night. No pen and paper, no maths mistakes, no ads after every point.
+
+BIG, CLEAR SCORES
+Every player on screen with big numbers, their position and who deals next: the dealer moves on by itself every round.
+
+READY-MADE GAMES
+• Free play: any game, with or without a target, including "lowest score wins".
+• Scopa, Burraco and Scala 40: the classic Italian card games, with guided scoring.
+
+MADE A MISTAKE? FIX IT
+Tap any round in the table and change it: all totals update. You can also remove the last round.
+
+NOTHING GETS LOST
+The game is saved after every round: close the app or take a call and carry on where you left off. The screen stays on while you play.
+
+GAME OVER
+Winner, ranking, a chart of how the game went and a rematch with the same players in one tap.
+
+NO DISTRACTIONS
+No ads, no account, no subscription. Works offline and your data stays on your phone.
+
+SIMPLE SCORE PRO
+One purchase unlocks:
+• Burraco and Scala 40 with guided scoring
+• up to 12 players or teams (free: up to 6)
+• full history and statistics per player (free: last 5 games)
+• virtual dice and 6 app colours
+
+Light and dark theme. In 14 languages.
+
+RELEASE NOTES (version 1.0.0)
+First release of Simple Score.
