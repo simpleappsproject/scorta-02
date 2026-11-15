@@ -6,7 +6,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "serve": "python3 -m http.server 8766 --directory www",
-    "sync": "cap sync android"
+    "sync": "cap sync android",
+    "check": "node tools/check-i18n.js"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^8.0.1",
