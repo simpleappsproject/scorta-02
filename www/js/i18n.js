@@ -92,7 +92,10 @@ window.I18N = {
     'pro.restore': 'Ripristina acquisto', 'pro.close': 'Chiudi',
     'pro.web': 'L’acquisto è disponibile nell’app Android.',
     'pro.thanks': 'Grazie! Pro è attivo.', 'pro.restored': 'Acquisto ripristinato.', 'pro.notFound': 'Nessun acquisto trovato su questo account.',
-    'pro.pending': 'Pagamento in attesa: Pro si attiverà appena confermato.', 'pro.cancelled': 'Acquisto annullato.', 'pro.error': 'Qualcosa non ha funzionato. Riprova più tardi.'
+    'pro.pending': 'Pagamento in attesa: Pro si attiverà appena confermato.', 'pro.cancelled': 'Acquisto annullato.', 'pro.error': 'Qualcosa non ha funzionato. Riprova più tardi.',
+
+    'b.overHint': 'La partita è finita: tocca «Fine» per salvarla oppure correggi una mano.',
+    'bur.needBurraco': 'Per chiudere serve almeno un burraco'
   },
   en: {
     _: {name:'English', locale:'en-GB', dir:'ltr'},
@@ -182,7 +185,10 @@ window.I18N = {
     'pro.restore': 'Restore purchase', 'pro.close': 'Close',
     'pro.web': 'The purchase is available in the Android app.',
     'pro.thanks': 'Thank you! Pro is active.', 'pro.restored': 'Purchase restored.', 'pro.notFound': 'No purchase found on this account.',
-    'pro.pending': 'Payment pending: Pro will turn on once it’s confirmed.', 'pro.cancelled': 'Purchase cancelled.', 'pro.error': 'Something went wrong. Please try again later.'
+    'pro.pending': 'Payment pending: Pro will turn on once it’s confirmed.', 'pro.cancelled': 'Purchase cancelled.', 'pro.error': 'Something went wrong. Please try again later.',
+
+    'b.overHint': 'The game is over: tap “End” to save it, or correct a round.',
+    'bur.needBurraco': 'You need at least one burraco to go out'
   },
   es: {
     '_': {"name":"Español","locale":"es-ES","dir":"ltr"},
@@ -272,7 +278,10 @@ window.I18N = {
     'pro.restore': "Restaurar compra", 'pro.close': "Cerrar",
     'pro.web': "La compra está disponible en la app de Android.",
     'pro.thanks': "¡Gracias! Pro está activo.", 'pro.restored': "Compra restaurada.", 'pro.notFound': "No hay ninguna compra en esta cuenta.",
-    'pro.pending': "Pago pendiente: Pro se activará en cuanto se confirme.", 'pro.cancelled': "Compra cancelada.", 'pro.error': "Algo salió mal. Inténtalo de nuevo más tarde."
+    'pro.pending': "Pago pendiente: Pro se activará en cuanto se confirme.", 'pro.cancelled': "Compra cancelada.", 'pro.error': "Algo salió mal. Inténtalo de nuevo más tarde.",
+
+    'b.overHint': "La partida ha terminado: toca «Fin» para guardarla o corrige una ronda.",
+    'bur.needBurraco': "Para cerrar hace falta al menos un burraco"
   },
   fr: {
     '_': {"name":"Français","locale":"fr-FR","dir":"ltr"},
@@ -280,7 +289,7 @@ window.I18N = {
     'tab.home': "Partie", 'tab.history': "Historique", 'tab.settings': "Réglages", 'tab.aria': "Sections",
 
     'home.new': "Nouvelle partie",
-    'home.resume': "Reprendre : {game}", 'home.resumeInfo': "{n} manches · {lead} mène avec {pts}", 'home.resumeInfo.one': "1 manche · {lead} mène avec {pts}", 'home.go': "Jouer",
+    'home.resume': "Reprendre : {game}", 'home.resumeInfo': "{n} manches · {lead} mène avec {pts}", 'home.resumeInfo.one': "{n} manche · {lead} mène avec {pts}", 'home.go': "Jouer",
     'game.free': "Libre", 'game.free.h': "N’importe quel jeu : saisie libre des points",
     'game.scopa': "Scopa", 'game.scopa.h': "Cartes, deniers, settebello, primiera et scopas",
     'game.burraco': "Burraco", 'game.burraco.h': "Burracos propres et sales, sortie, pot",
@@ -321,11 +330,11 @@ window.I18N = {
     's40.closed': "Qui est sorti", 's40.dbl': "Sorti d’un coup", 's40.dbl.h': "Les autres comptent double",
     's40.values': "Cartes restantes : joker 25, as 11, figures 10, les autres leur valeur.",
 
-    'end.tie': "Égalité", 'end.wins': "Gagne en {n} manches", 'end.wins.one': "Gagne en 1 manche", 'end.chart': "Déroulé de la partie",
+    'end.tie': "Égalité", 'end.wins': "Gagne en {n} manches", 'end.wins.one': "Gagne en {n} manche", 'end.chart': "Déroulé de la partie",
     'end.close': "Fermer", 'end.again': "Revanche", 'end.playAgain': "Rejouer",
 
     'h.empty': "Les parties terminées apparaissent ici.", 'h.won': "a gagné",
-    'h.older': "{n} parties plus anciennes", 'h.older.one': "1 partie plus ancienne", 'h.olderBtn': "Historique complet avec Pro",
+    'h.older': "{n} parties plus anciennes", 'h.older.one': "{n} partie plus ancienne", 'h.olderBtn': "Historique complet avec Pro",
     'h.stats': "Statistiques", 'h.statsPro': "Victoires et parties par joueur avec Pro.",
     'h.player': "Joueur", 'h.played': "Parties", 'h.wins': "Gagnées",
 
@@ -362,7 +371,10 @@ window.I18N = {
     'pro.restore': "Restaurer l’achat", 'pro.close': "Fermer",
     'pro.web': "L’achat est disponible dans l’appli Android.",
     'pro.thanks': "Merci ! Pro est activé.", 'pro.restored': "Achat restauré.", 'pro.notFound': "Aucun achat trouvé sur ce compte.",
-    'pro.pending': "Paiement en attente : Pro s’activera dès sa confirmation.", 'pro.cancelled': "Achat annulé.", 'pro.error': "Un problème est survenu. Réessayez plus tard."
+    'pro.pending': "Paiement en attente : Pro s’activera dès sa confirmation.", 'pro.cancelled': "Achat annulé.", 'pro.error': "Un problème est survenu. Réessayez plus tard.",
+
+    'b.overHint': "La partie est terminée : touchez « Fin » pour l’enregistrer, ou corrigez une manche.",
+    'bur.needBurraco': "Il faut au moins un burraco pour sortir"
   },
   de: {
     '_': {"name":"Deutsch","locale":"de-DE","dir":"ltr"},
@@ -452,7 +464,10 @@ window.I18N = {
     'pro.restore': "Kauf wiederherstellen", 'pro.close': "Schließen",
     'pro.web': "Der Kauf ist in der Android-App möglich.",
     'pro.thanks': "Danke! Pro ist aktiv.", 'pro.restored': "Kauf wiederhergestellt.", 'pro.notFound': "Kein Kauf auf diesem Konto gefunden.",
-    'pro.pending': "Zahlung ausstehend: Pro wird aktiv, sobald sie bestätigt ist.", 'pro.cancelled': "Kauf abgebrochen.", 'pro.error': "Etwas hat nicht geklappt. Bitte versuche es später noch einmal."
+    'pro.pending': "Zahlung ausstehend: Pro wird aktiv, sobald sie bestätigt ist.", 'pro.cancelled': "Kauf abgebrochen.", 'pro.error': "Etwas hat nicht geklappt. Bitte versuche es später noch einmal.",
+
+    'b.overHint': "Das Spiel ist vorbei: Tippe auf „Ende“, um es zu speichern, oder korrigiere eine Runde.",
+    'bur.needBurraco': "Zum Ausmachen brauchst du mindestens einen Burraco"
   },
   pt: {
     '_': {"name":"Português","locale":"pt-BR","dir":"ltr"},
@@ -460,7 +475,7 @@ window.I18N = {
     'tab.home': "Partida", 'tab.history': "Histórico", 'tab.settings': "Ajustes", 'tab.aria': "Seções",
 
     'home.new': "Nova partida",
-    'home.resume': "Continuar: {game}", 'home.resumeInfo': "{n} rodadas · {lead} lidera com {pts}", 'home.resumeInfo.one': "1 rodada · {lead} lidera com {pts}", 'home.go': "Ir",
+    'home.resume': "Continuar: {game}", 'home.resumeInfo': "{n} rodadas · {lead} lidera com {pts}", 'home.resumeInfo.one': "{n} rodada · {lead} lidera com {pts}", 'home.go': "Ir",
     'game.free': "Livre", 'game.free.h': "Qualquer jogo: marque os pontos à vontade",
     'game.scopa': "Scopa", 'game.scopa.h': "Cartas, ouros, settebello, primiera e escovas",
     'game.burraco': "Burraco", 'game.burraco.h': "Burracos limpos e sujos, batida, morto",
@@ -501,11 +516,11 @@ window.I18N = {
     's40.closed': "Quem bateu", 's40.dbl': "Bateu de mão", 's40.dbl.h': "Os outros contam em dobro",
     's40.values': "Cartas que sobraram: curinga 25, ás 11, figuras 10, as outras o seu valor.",
 
-    'end.tie': "Empate", 'end.wins': "Vence em {n} rodadas", 'end.wins.one': "Vence em 1 rodada", 'end.chart': "Como foi a partida",
+    'end.tie': "Empate", 'end.wins': "Vence em {n} rodadas", 'end.wins.one': "Vence em {n} rodada", 'end.chart': "Como foi a partida",
     'end.close': "Fechar", 'end.again': "Revanche", 'end.playAgain': "Jogar de novo",
 
     'h.empty': "As partidas terminadas aparecem aqui.", 'h.won': "venceu",
-    'h.older': "Mais {n} partidas antigas", 'h.older.one': "Mais 1 partida antiga", 'h.olderBtn': "Histórico completo com Pro",
+    'h.older': "Mais {n} partidas antigas", 'h.older.one': "Mais {n} partida antiga", 'h.olderBtn': "Histórico completo com Pro",
     'h.stats': "Estatísticas", 'h.statsPro': "Vitórias e partidas por jogador com Pro.",
     'h.player': "Jogador", 'h.played': "Partidas", 'h.wins': "Vitórias",
 
@@ -542,7 +557,10 @@ window.I18N = {
     'pro.restore': "Restaurar compra", 'pro.close': "Fechar",
     'pro.web': "A compra está disponível no app para Android.",
     'pro.thanks': "Obrigado! O Pro está ativo.", 'pro.restored': "Compra restaurada.", 'pro.notFound': "Nenhuma compra encontrada nesta conta.",
-    'pro.pending': "Pagamento pendente: o Pro será ativado assim que for confirmado.", 'pro.cancelled': "Compra cancelada.", 'pro.error': "Algo deu errado. Tente novamente mais tarde."
+    'pro.pending': "Pagamento pendente: o Pro será ativado assim que for confirmado.", 'pro.cancelled': "Compra cancelada.", 'pro.error': "Algo deu errado. Tente novamente mais tarde.",
+
+    'b.overHint': "A partida terminou: toque em “Fim” para salvá-la ou corrija uma rodada.",
+    'bur.needBurraco': "Para bater é preciso pelo menos um burraco"
   },
   id: {
     '_': {"name":"Bahasa Indonesia","locale":"id-ID","dir":"ltr"},
@@ -720,7 +738,10 @@ window.I18N = {
     'pro.notFound': "Tidak ada pembelian di akun ini.",
     'pro.pending': "Pembayaran tertunda: Pro akan aktif setelah dikonfirmasi.",
     'pro.cancelled': "Pembelian dibatalkan.",
-    'pro.error': "Terjadi kesalahan. Coba lagi nanti."
+    'pro.error': "Terjadi kesalahan. Coba lagi nanti.",
+
+    'b.overHint': "Permainan sudah selesai: ketuk “Selesai” untuk menyimpannya, atau perbaiki satu ronde.",
+    'bur.needBurraco': "Untuk menutup perlu minimal satu burraco"
   },
   tr: {
     '_': {"name":"Türkçe","locale":"tr-TR","dir":"ltr"},
@@ -898,7 +919,10 @@ window.I18N = {
     'pro.notFound': "Bu hesapta satın alma bulunamadı.",
     'pro.pending': "Ödeme bekleniyor: onaylanınca Pro etkinleşecek.",
     'pro.cancelled': "Satın alma iptal edildi.",
-    'pro.error': "Bir şeyler ters gitti. Lütfen daha sonra tekrar dene."
+    'pro.error': "Bir şeyler ters gitti. Lütfen daha sonra tekrar dene.",
+
+    'b.overHint': "Oyun bitti: kaydetmek için “Bitir”e dokun ya da bir eli düzelt.",
+    'bur.needBurraco': "Bitirmek için en az bir burraco gerekir"
   },
   ru: {
     '_': {"name":"Русский","locale":"ru-RU","dir":"ltr"},
@@ -1082,7 +1106,10 @@ window.I18N = {
     'pro.notFound': "На этом аккаунте покупок не найдено.",
     'pro.pending': "Платёж в обработке: Pro включится после подтверждения.",
     'pro.cancelled': "Покупка отменена.",
-    'pro.error': "Что-то пошло не так. Попробуйте позже."
+    'pro.error': "Что-то пошло не так. Попробуйте позже.",
+
+    'b.overHint': "Игра окончена: нажмите «Конец», чтобы сохранить её, или исправьте раунд.",
+    'bur.needBurraco': "Чтобы выйти, нужен хотя бы один бурако"
   },
   hi: {
     '_': {"name":"हिन्दी","locale":"hi-IN","dir":"ltr"},
@@ -1260,7 +1287,10 @@ window.I18N = {
     'pro.notFound': "इस अकाउंट पर कोई ख़रीद नहीं मिली।",
     'pro.pending': "भुगतान बाकी है: पुष्टि होते ही Pro चालू हो जाएगा।",
     'pro.cancelled': "ख़रीद रद्द हुई।",
-    'pro.error': "कुछ गड़बड़ हो गई। बाद में फिर कोशिश करें।"
+    'pro.error': "कुछ गड़बड़ हो गई। बाद में फिर कोशिश करें।",
+
+    'b.overHint': "खेल ख़त्म हो गया: सेव करने के लिए “ख़त्म” पर टैप करें, या कोई राउंड सुधारें।",
+    'bur.needBurraco': "हाथ ख़ाली करने के लिए कम से कम एक बुराको चाहिए"
   },
   zh: {
     '_': {"name":"中文（简体）","locale":"zh-CN","dir":"ltr"},
@@ -1350,7 +1380,10 @@ window.I18N = {
     'pro.restore': "恢复购买", 'pro.close': "关闭",
     'pro.web': "可在 Android 应用中购买。",
     'pro.thanks': "谢谢！Pro 已激活。", 'pro.restored': "已恢复购买。", 'pro.notFound': "此账号下没有找到购买记录。",
-    'pro.pending': "付款处理中：确认后 Pro 会自动开启。", 'pro.cancelled': "购买已取消。", 'pro.error': "出了点问题，请稍后再试。"
+    'pro.pending': "付款处理中：确认后 Pro 会自动开启。", 'pro.cancelled': "购买已取消。", 'pro.error': "出了点问题，请稍后再试。",
+
+    'b.overHint': "对局已结束：点按“结束”保存，或修改某一轮。",
+    'bur.needBurraco': "至少要有一个 burraco 才能出完牌"
   },
   ja: {
     '_': {"name":"日本語","locale":"ja-JP","dir":"ltr"},
@@ -1440,7 +1473,10 @@ window.I18N = {
     'pro.restore': "購入を復元", 'pro.close': "閉じる",
     'pro.web': "購入はAndroidアプリで行えます。",
     'pro.thanks': "ありがとうございます！Proが有効になりました。", 'pro.restored': "購入を復元しました。", 'pro.notFound': "このアカウントに購入が見つかりません。",
-    'pro.pending': "支払い保留中：確認され次第Proが有効になります。", 'pro.cancelled': "購入をキャンセルしました。", 'pro.error': "問題が発生しました。しばらくしてからもう一度お試しください。"
+    'pro.pending': "支払い保留中：確認され次第Proが有効になります。", 'pro.cancelled': "購入をキャンセルしました。", 'pro.error': "問題が発生しました。しばらくしてからもう一度お試しください。",
+
+    'b.overHint': "ゲームは終わりました。「終了」をタップして保存するか、ラウンドを修正してください。",
+    'bur.needBurraco': "上がるには少なくとも 1 つのブラッコが必要です"
   },
   ko: {
     '_': {"name":"한국어","locale":"ko-KR","dir":"ltr"},
@@ -1530,7 +1566,10 @@ window.I18N = {
     'pro.restore': "구매 복원", 'pro.close': "닫기",
     'pro.web': "구매는 Android 앱에서 할 수 있어요.",
     'pro.thanks': "감사합니다! Pro가 활성화됐어요.", 'pro.restored': "구매를 복원했어요.", 'pro.notFound': "이 계정에서 구매 내역을 찾을 수 없어요.",
-    'pro.pending': "결제 대기 중: 확인되면 Pro가 켜져요.", 'pro.cancelled': "구매를 취소했어요.", 'pro.error': "문제가 생겼어요. 잠시 후 다시 시도해 주세요."
+    'pro.pending': "결제 대기 중: 확인되면 Pro가 켜져요.", 'pro.cancelled': "구매를 취소했어요.", 'pro.error': "문제가 생겼어요. 잠시 후 다시 시도해 주세요.",
+
+    'b.overHint': "게임이 끝났어요. 저장하려면 “종료”를 탭하거나 라운드를 고치세요.",
+    'bur.needBurraco': "마무리하려면 부라코가 하나 이상 있어야 해요"
   },
   ar: {
     '_': {"name":"العربية","locale":"ar-u-nu-latn","dir":"rtl"},
@@ -1620,6 +1659,10 @@ window.I18N = {
     'pro.restore': "استعادة الشراء", 'pro.close': "إغلاق",
     'pro.web': "الشراء متاح في تطبيق Android.",
     'pro.thanks': "شكرًا! Pro مفعّل الآن.", 'pro.restored': "تمت استعادة الشراء.", 'pro.notFound': "لم يُعثر على أي شراء في هذا الحساب.",
-    'pro.pending': "الدفع قيد الانتظار: سيُفعَّل Pro فور تأكيده.", 'pro.cancelled': "أُلغي الشراء.", 'pro.error': "حدث خطأ ما. يرجى المحاولة لاحقًا."
+    'pro.pending': "الدفع قيد الانتظار: سيُفعَّل Pro فور تأكيده.", 'pro.cancelled': "أُلغي الشراء.", 'pro.error': "حدث خطأ ما. يرجى المحاولة لاحقًا.",
+
+    'b.overHint': "انتهت اللعبة: المس «إنهاء» لحفظها، أو صحّح إحدى الجولات.",
+    'bur.needBurraco': "لإنهاء اللعب تحتاج إلى بوراكو واحد على الأقل",
+    'home.resumeInfo.zero': "لا جولات بعد · {lead} في الصدارة بـ {pts}"
   }
 };

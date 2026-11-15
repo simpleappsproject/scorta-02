@@ -7,17 +7,20 @@
   const PRO_ID = 'score_pro';            // ID del prodotto da creare in Google Play Console
 
   /* Schermo sempre acceso durante la partita */
-  let wl = null;
+  let wl = null, wantAwake = false;
   async function keepAwake(on){
+    wantAwake = !!on;
     if(isNative && P.KeepAwake){
       try{ on ? await P.KeepAwake.keepAwake() : await P.KeepAwake.allowSleep(); }catch(e){}
       return;
     }
     try{
-      if(on){ if(navigator.wakeLock) wl = await navigator.wakeLock.request('screen'); }
-      else { wl && wl.release(); wl = null; }
+      if(on){ if(navigator.wakeLock && !wl){ wl = await navigator.wakeLock.request('screen'); wl.addEventListener && wl.addEventListener('release',()=>{ wl = null; }); } }
+      else { const w = wl; wl = null; w && w.release(); }
     }catch(e){ wl = null; }
   }
+  /* Nel browser il blocco dello schermo si perde quando si cambia app: lo si richiede al ritorno */
+  if(!isNative) document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && wantAwake && !wl) keepAwake(true); });
 
   /* Vibrazione: pattern [vibra, pausa, vibra, ...] in millisecondi */
   function vibrate(pattern){

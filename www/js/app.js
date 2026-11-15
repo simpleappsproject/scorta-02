@@ -19,6 +19,7 @@ const COLORS = ['#17804f','#2457c5','#c8321f','#c98a00','#6a44c9','#bf2f74','#13
 let current = store.get('sc.current', null);
 let games = store.get('sc.games', []); if(!Array.isArray(games)) games=[];
 let recent = store.get('sc.players', []); if(!Array.isArray(recent)) recent=[];
+recent = recent.filter(x=>typeof x==='string');
 let settings = Object.assign({lang:'auto',theme:'auto',accent:'green',awake:true}, store.get('sc.settings', {}));
 let pro = !!store.get('sc.pro', false);
 const saveCurrent = () => store.set('sc.current', current);
@@ -35,6 +36,24 @@ const GAMES = {
 };
 const GAME_ORDER = ['free','scopa','burraco','scala40'];
 const isLow = g => g.type==='scala40' || (g.type==='free' && g.opts.low);
+
+/* Controllo di una partita (salvata, o letta da un backup): se è rovinata non deve bloccare l'app.
+   normGame completa i campi mancanti senza cambiare i punti. */
+function validGame(g){
+  return !!(g && typeof g==='object' && GAMES[g.type] && Array.isArray(g.players) && g.players.length>=1 && g.players.length<=MAX_PLAYERS
+    && g.players.every(p=>p && typeof p.name==='string') && Array.isArray(g.hands) && g.hands.every(h=>h && Array.isArray(h.v)));
+}
+function normGame(g){
+  if(typeof g.id!=='string' || !g.id) g.id=uid();
+  if(!g.opts || typeof g.opts!=='object') g.opts={};
+  if(typeof g.target!=='number') g.target=GAMES[g.type].target;
+  g.players.forEach((p,i)=>{ if(typeof p.color!=='string') p.color=COLORS[i%COLORS.length]; });
+  if(typeof g.started!=='string') g.started=g.ended||new Date().toISOString();
+  if(g.winners && !Array.isArray(g.winners)) delete g.winners;
+  return g;
+}
+current = validGame(current) ? normGame(current) : null;
+games = games.filter(validGame).map(normGame);
 
 /* ---------- Lingua ---------- */
 const LANGS = Object.keys(I18N);
@@ -98,15 +117,19 @@ function handValues(g, d){
   }
   if(g.type==='scala40'){
     const out = standings(g, d._upto).out;
-    return g.players.map((p,i)=> out[i] || d.closed===i ? 0 : (+d.v[i]||0)*(d.dbl?2:1));
+    /* raddoppio solo se è attivo nelle regole e qualcuno ha chiuso */
+    const k = g.opts.dbl && d.dbl && d.closed>=0 ? 2 : 1;
+    return g.players.map((p,i)=> out[i] || d.closed===i ? 0 : (+d.v[i]||0)*k);
   }
   return Array.from({length:n},(x,i)=>+d.v[i]||0);
 }
-/* Totali, eliminati, rientri e andamento mano per mano. upto = considera solo le prime "upto" mani */
+/* Totali, eliminati, rientri e andamento mano per mano. upto = considera solo le prime "upto" mani.
+   outAt[i] = numero della mano (da 0) in cui il giocatore è stato eliminato, -1 se è in gioco.
+   outHist[k] = chi era eliminato dopo k mani (serve per far girare il mazziere). */
 function standings(g, upto){
   const n=g.players.length, hands=g.hands.slice(0, upto==null ? g.hands.length : upto);
-  const tot=Array(n).fill(0), out=Array(n).fill(false), re=Array(n).fill(0), hist=[tot.slice()];
-  hands.forEach(h=>{
+  const tot=Array(n).fill(0), out=Array(n).fill(false), re=Array(n).fill(0), outAt=Array(n).fill(-1), hist=[tot.slice()], outHist=[out.slice()];
+  hands.forEach((h,k)=>{
     for(let i=0;i<n;i++) if(!out[i]) tot[i]+= (+h.v[i]||0);
     if(g.type==='scala40'){
       const lim=g.target;
@@ -115,18 +138,25 @@ function standings(g, upto){
       over.forEach(i=>{
         /* Rientro (se scelto): una volta sola, con il punteggio più alto tra chi è ancora in gioco, se restano almeno 2 giocatori */
         if(g.opts.reentry && re[i]<1 && still.length>=2){ re[i]++; tot[i]=Math.max(...still.map(j=>tot[j])); }
-        else out[i]=true;
+        else { out[i]=true; outAt[i]=k; }
       });
     }
-    hist.push(tot.slice());
+    hist.push(tot.slice()); outHist.push(out.slice());
   });
-  return {tot, out, re, hist};
+  return {tot, out, re, outAt, hist, outHist};
 }
 /* Classifica: indici dei giocatori dal primo all'ultimo */
 function ranking(g, st){
   st = st || standings(g);
   const low=isLow(g);
-  return [...g.players.keys()].sort((a,b)=> (st.out[a]-st.out[b]) || (low ? st.tot[a]-st.tot[b] : st.tot[b]-st.tot[a]));
+  /* chi è eliminato va in fondo; tra gli eliminati è più in alto chi è uscito più tardi */
+  return [...g.players.keys()].sort((a,b)=> (st.out[a]-st.out[b]) || (st.out[a] ? st.outAt[b]-st.outAt[a] : 0) || (low ? st.tot[a]-st.tot[b] : st.tot[b]-st.tot[a]));
+}
+/* Posizione in classifica (1 = primo); a pari punti stessa posizione */
+function positions(g, st, rk){
+  const pos=Array(g.players.length).fill(0);
+  rk.forEach((i,k)=>{ const prev=rk[k-1]; pos[i] = k>0 && st.out[prev]===st.out[i] && st.outAt[prev]===st.outAt[i] && st.tot[prev]===st.tot[i] ? pos[prev] : k+1; });
+  return pos;
 }
 /* La partita è finita? Restituisce gli indici dei vincitori, oppure null */
 function winners(g){
@@ -135,7 +165,11 @@ function winners(g){
   if(g.type==='scala40'){
     const alive=r.filter(i=>!st.out[i]);
     if(alive.length===1) return alive;
-    if(alive.length===0){ const best=Math.min(...st.tot); return r.filter(i=>st.tot[i]===best); }
+    if(alive.length===0){
+      /* tutti fuori nella stessa mano: vince chi ha meno punti tra gli ultimi eliminati (non chi era uscito prima) */
+      const last=Math.max(...st.outAt), cand=r.filter(i=>st.outAt[i]===last), best=Math.min(...cand.map(i=>st.tot[i]));
+      return cand.filter(i=>st.tot[i]===best);
+    }
     return null;
   }
   if(!g.target) return null;
@@ -148,13 +182,24 @@ function winners(g){
   const best=Math.max(...st.tot), w=r.filter(i=>st.tot[i]===best);
   return w.length===1 ? w : null;     // pari punti in testa: si gioca un'altra mano
 }
+/* Mazziere della prossima mano: a ogni mano passa al giocatore successivo che in quel momento è ancora in gioco
+   (chi viene eliminato più tardi ha fatto il mazziere nelle mani precedenti) */
 function dealerOf(g){
-  const n=g.players.length, out=standings(g).out;
-  let d=((g.firstDealer||0)%n+n)%n, steps=g.hands.length, guard=0;
-  while(out[d] && guard++<n) d=(d+1)%n;
-  while(steps>0 && guard++<500){ d=(d+1)%n; if(!out[d]) steps--; }
+  const n=g.players.length, oh=standings(g).outHist;
+  let d=((g.firstDealer||0)%n+n)%n;
+  for(let k=1;k<=g.hands.length;k++){
+    const out=oh[k]; if(out.every(Boolean)) break;
+    let guard=0; do{ d=(d+1)%n; }while(out[d] && guard++<n);
+  }
   return d;
 }
+/* Scala 40: i punti di ogni mano dipendono da chi era già eliminato, quindi dopo ogni modifica si ricalcolano tutte in ordine */
+function recompute(g){
+  if(g.type!=='scala40') return;
+  g.hands.forEach((h,k)=>{ if(!h.d || !Array.isArray(h.d.v)) return; h.d._upto=k; h.v=handValues(g,h.d); delete h.d._upto; });
+}
+/* "Impronta" delle mani: serve a capire se dopo un Annulla la partita è rimasta uguale */
+const handsSig = g => JSON.stringify(g.hands.map(h=>h.v));
 
 /* ---------- Pro ---------- */
 function setPro(v){
@@ -277,7 +322,7 @@ function renderSetup(){
   $('#suTitle').textContent = t('game.'+draft.type);
   $('#suSub').textContent = current ? t('su.replace') : '';
   $('#suPlayersLbl').textContent = G.team ? t('su.teams') : t('su.players');
-  $('#suPlayers').innerHTML = draft.players.map((p,i)=>`<div class="prow"><span class="pdot" style="--c:${p.color}" data-color="${i}" role="button" aria-label="${esc(t('su.color'))}"></span>
+  $('#suPlayers').innerHTML = draft.players.map((p,i)=>`<div class="prow"><button class="pdot" style="--c:${p.color}" data-color="${i}" aria-label="${esc(t('su.color'))}"></button>
     <input class="in" data-pname="${i}" maxlength="24" value="${esc(p.name)}" aria-label="${esc(t('su.name',{n:i+1}))}" autocomplete="off">
     ${draft.players.length>G.min?`<button class="x" data-prem="${i}" aria-label="${esc(t('su.remove'))}">×</button>`:''}</div>`).join('');
   const canMore = draft.players.length < G.max;
@@ -320,8 +365,15 @@ $('#suOptions').addEventListener('click',e=>{ const b=e.target.closest('[data-ta
 $('#suOptions').addEventListener('change',e=>{ const k=e.target.dataset.opt; if(k) draft.opts[k]=e.target.checked; });
 $('#suBack').addEventListener('click',()=>show('home'));
 $('#suGo').addEventListener('click',()=>{
-  const names=draft.players.filter(p=>!p.auto && (p.name||'').trim()).map(p=>p.name.trim());
-  draft.players.forEach((p,i)=>{ p.name=(p.name||'').trim() || (GAMES[draft.type].team ? t('su.team',{n:i+1}) : t('su.player',{n:i+1})); delete p.auto; });
+  const clean = x => String(x||'').trim().replace(/\s+/g,' ');
+  const names=draft.players.filter(p=>!p.auto && clean(p.name)).map(p=>clean(p.name));
+  /* nome vuoto → nome predefinito; due giocatori con lo stesso nome → al secondo si aggiunge un numero (Marco, Marco 2) */
+  const seen=new Set();
+  draft.players.forEach((p,i)=>{
+    let nm = clean(p.name) || (GAMES[draft.type].team ? t('su.team',{n:i+1}) : t('su.player',{n:i+1}));
+    const base=nm; let k=2; while(seen.has(nm.toLowerCase())) nm=base+' '+(k++);
+    seen.add(nm.toLowerCase()); p.name=nm; delete p.auto;
+  });
   const lower=new Set(names.map(n=>n.toLowerCase()));
   recent = names.concat(recent.filter(n=>!lower.has(n.toLowerCase()))).slice(0,20);
   store.set('sc.players', recent);
@@ -334,18 +386,21 @@ $('#suGo').addEventListener('click',()=>{
 /* ---------- Tabellone ---------- */
 function renderBoard(){
   const g=current; if(!g){ show('home'); return; }
-  const st=standings(g), rk=ranking(g,st), n=g.players.length, dealer=dealerOf(g), w=winners(g);
+  const st=standings(g), rk=ranking(g,st), pos=positions(g,st,rk), n=g.players.length, dealer=dealerOf(g), w=winners(g);
+  /* dopo "Annulla" sulla fine partita non la si richiude subito: si aspetta una correzione o il tasto Fine */
+  const held = !!w && g.hold===handsSig(g);
+  if(w && !held){ finishGame(w); return; }
   $('#bName').textContent = gameName(g);
   $('#bInfo').textContent = t(g.type!=='free' ? 'b.info.'+g.type : !g.target ? 'b.info.free0' : g.opts.low ? 'b.info.freeLow' : 'b.info.free', {t:num(g.target), n:g.hands.length});
   const cols = n<=2 ? 2 : n<=4 ? 2 : 3;
   const tiles=$('#tiles'); tiles.style.setProperty('--cols',cols); tiles.classList.toggle('many', n>4);
-  const lead = g.hands.length ? rk[0] : -1;
+  const lead = g.hands.length ? rk[0] : -1;   // in testa (a pari punti anche gli altri primi)
   const ref = g.target || Math.max(1,...st.tot.map(Math.abs));
   tiles.innerHTML = g.players.map((p,i)=>{
-    const pos=rk.indexOf(i)+1, out=st.out[i];
-    const info = out ? t('b.out') : (st.re[i] ? t('b.reentered') : (g.hands.length ? t('b.pos',{n:pos}) : ''));
+    const out=st.out[i], first = lead>=0 && !out && pos[i]===pos[lead];
+    const info = out ? t('b.out') : (st.re[i] ? t('b.reentered') : (g.hands.length ? t('b.pos',{n:pos[i]}) : ''));
     const pct = Math.max(0,Math.min(100, st.tot[i]/ref*100));
-    return `<div class="tile${i===lead&&!out?' lead':''}${out?' out':''}" style="--c:${p.color}">
+    return `<div class="tile${first?' lead':''}${out?' out':''}" style="--c:${p.color}">
       <div class="tn"><span>${esc(p.name)}</span></div>
       <div class="tt">${num(st.tot[i])}</div>
       <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}">${cardsSVG}${esc(t('b.dealer'))}</button>`:''}</div>
@@ -353,13 +408,12 @@ function renderBoard(){
     </div>`;
   }).join('');
   $('#bAdd').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>${esc(t('b.add',{n:g.hands.length+1}))}`;
-  $('#bHint').textContent = g.hands.length ? t('b.hint') : t('b.dealerHint');
+  $('#bHint').textContent = held ? t('b.overHint') : g.hands.length ? t('b.hint') : t('b.dealerHint');
   // Tabella delle mani
   $('#handsHead').hidden = !g.hands.length; $('#handsWrap').hidden = !g.hands.length;
   $('#hands').innerHTML = `<thead><tr><th>#</th>${g.players.map(p=>`<th title="${esc(p.name)}">${esc(p.name)}</th>`).join('')}</tr></thead><tbody>`+
     g.hands.map((h,k)=>`<tr data-hand="${k}"><td>${k+1}</td>${g.players.map((p,i)=>{ const v=+h.v[i]||0; return `<td class="${v<0?'neg':''}">${v>0&&g.type!=='scala40'?'+':''}${num(v)}</td>`; }).join('')}</tr>`).reverse().join('')+'</tbody>';
   disarm($('#bEnd')); disarm($('#bUndo'));
-  if(w){ finishGame(w); }
 }
 $('#tiles').addEventListener('click',e=>{
   const d=e.target.closest('[data-dealer]');
@@ -372,14 +426,15 @@ $('#tiles').addEventListener('click',e=>{
 $('#bAdd').addEventListener('click',()=>openHand(null));
 $('#hands').addEventListener('click',e=>{ const r=e.target.closest('[data-hand]'); if(r) openHand(+r.dataset.hand); });
 $('#bUndo').addEventListener('click',e=>arm(e.currentTarget,t('b.undoConfirm'),()=>{
-  const h=current.hands.pop(); saveCurrent(); renderBoard();
-  toast(t('toast.handRemoved'),()=>{ current.hands.push(h); saveCurrent(); renderBoard(); });
+  const g=current; if(!g || !g.hands.length) return;
+  const h=g.hands.pop(); recompute(g); saveCurrent(); renderBoard();
+  toast(t('toast.handRemoved'),()=>{ if(current!==g) return; g.hands.push(h); recompute(g); saveCurrent(); show('board'); });
 }));
 $('#bEnd').addEventListener('click',e=>arm(e.currentTarget,t('b.endConfirm'),()=>{
   if(!current.hands.length){ const g=current; current=null; saveCurrent(); show('home'); toast(t('toast.discarded'),()=>{ current=g; saveCurrent(); show('board'); }); return; }
-  const st=standings(current), rk=ranking(current,st), low=isLow(current);
-  const best = st.tot[rk[0]];
-  finishGame(rk.filter(i=>!st.out[i] && st.tot[i]===best));
+  const w=winners(current); if(w){ finishGame(w); return; }
+  const st=standings(current), rk=ranking(current,st), best=st.tot[rk[0]];
+  finishGame(rk.filter(i=>st.out[i]===st.out[rk[0]] && st.tot[i]===best));
 }));
 
 /* ---------- Inserimento di una mano ---------- */
@@ -452,7 +507,10 @@ $('#handBody').addEventListener('change',e=>{
 $('#handBody').addEventListener('click',e=>{
   const s=e.target.closest('[data-step]'), p=e.target.closest('[data-pick]'), sg=e.target.closest('[data-sign]');
   if(s){ const k=s.dataset.step, i=+s.dataset.i; hd[k][i]=Math.max(0,Math.min(20,(+hd[k][i]||0)+(+s.dataset.d))); s.parentNode.querySelector('output').textContent=hd[k][i]; N.vibrate([8]); renderPreview(); }
-  if(p){ const k=p.dataset.pick, v=+p.dataset.v; hd[k] = (hd[k]===v && k!=='sette') ? -1 : v; if(k==='closed' && v>=0) hd.v[v]=''; renderHand(); }
+  if(p){ const k=p.dataset.pick, v=+p.dataset.v; hd[k] = (hd[k]===v && k!=='sette') ? -1 : v;
+    if(k==='closed' && hd.closed>=0) hd.v[hd.closed]='';
+    if(k==='chiusura' && hd.chiusura>=0) hd.pozz[hd.chiusura]=true;   // per chiudere bisogna aver preso il pozzetto
+    renderHand(); }
   if(sg){ const i=+sg.dataset.sign; hd.neg[i]=!hd.neg[i]; if(hd.v[i]!=='') hd.v[i]=-hd.v[i]; sg.setAttribute('aria-pressed',hd.neg[i]); renderPreview(); }
 });
 function closeHand(){ $('#hand').hidden=true; hd=null; hk=null; }
@@ -461,29 +519,30 @@ $('#hand').addEventListener('click',e=>{ if(e.target.id==='hand') closeHand(); }
 $('#handSave').addEventListener('click',()=>{
   const g=current; readFree();
   if(g.type==='scopa' && hd.sette<0){ toast(t('scopa.needSette')); return; }
+  if(g.type==='burraco' && hd.chiusura>=0 && (+hd.cl[hd.chiusura]||0)+(+hd.sp[hd.chiusura]||0)<1){ toast(t('bur.needBurraco')); return; }
   const v=handValues(g, hd);
   const d=JSON.parse(JSON.stringify(hd)); delete d._upto;
   const entry={v, d};
   if(hk==null) g.hands.push(entry); else g.hands[hk]=entry;
-  /* le mani successive di Scala 40 dipendono da chi era eliminato: ricalcola */
-  if(g.type==='scala40') g.hands.forEach((h,k)=>{ h.d._upto=k; h.v=handValues(g,h.d); delete h.d._upto; });
+  recompute(g);   // Scala 40: le mani successive dipendono da chi era eliminato
   saveCurrent(); closeHand(); N.vibrate([15]); renderBoard();
 });
 $('#handDel').addEventListener('click',e=>arm(e.currentTarget,t('hand.delConfirm'),()=>{
-  const k=hk, h=current.hands[k]; current.hands.splice(k,1); saveCurrent(); closeHand(); renderBoard();
-  toast(t('toast.handRemoved'),()=>{ current.hands.splice(k,0,h); saveCurrent(); renderBoard(); });
+  const g=current, k=hk, h=g.hands[k]; g.hands.splice(k,1); recompute(g); saveCurrent(); closeHand(); renderBoard();
+  toast(t('toast.handRemoved'),()=>{ if(current!==g) return; g.hands.splice(k,0,h); recompute(g); saveCurrent(); show('board'); });
 }));
 
 /* ---------- Fine partita ---------- */
 let endGame=null, endFromHistory=false;
 function finishGame(w){
   const g=current; if(!g) return;
-  g.ended=new Date().toISOString(); g.winners=w;
+  g.ended=new Date().toISOString(); g.winners=w; delete g.hold;
   games.unshift(g); saveGames();
   current=null; saveCurrent();
   N.vibrate([30,60,30]);
   openEnd(g,false);
-  toast(t('toast.finished'),()=>{ games=games.filter(x=>x.id!==g.id); saveGames(); delete g.ended; delete g.winners; current=g; saveCurrent(); show('board'); });
+  /* Annulla: la partita torna sul tabellone così si può correggere l'ultima mano (se nel frattempo è iniziata un'altra partita, non la tocca) */
+  toast(t('toast.finished'),()=>{ if(current && current.hands.length) return; games=games.filter(x=>x.id!==g.id); saveGames(); delete g.ended; delete g.winners; g.hold=handsSig(g); current=g; saveCurrent(); show('board'); });
 }
 function openEnd(g, fromHistory){
   endGame=g; endFromHistory=fromHistory;
@@ -619,5 +678,5 @@ show(current ? 'board' : 'home');
 N.billing.init(setPro);
 
 /* Per le prove automatiche (Playwright) */
-window.__score = {handValues, standings, ranking, winners, dealerOf, get current(){ return current; }, get games(){ return games; }};
+window.__score = {handValues, standings, ranking, positions, winners, dealerOf, recompute, get current(){ return current; }, get games(){ return games; }};
 })();
