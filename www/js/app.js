@@ -288,6 +288,7 @@ const VIEWS=['home','setup','board','end','history','settings'];
 let view='home';
 function show(v){
   view=v;
+  hideToast();   // l'avviso con "Annulla" riguarda la schermata che si lascia: non deve coprire i pulsanti di quella nuova
   VIEWS.forEach(k=>{ $('#v-'+k).hidden = k!==v; });
   $('#topSub').textContent = t('sub.'+v);
   const tab = (v==='setup'||v==='board') ? 'home' : (v==='end' ? (endFromHistory?'history':'home') : v);
@@ -447,7 +448,7 @@ function renderBoard(){
   $('#bHint').textContent = held ? t('b.overHint') : g.hands.length ? t('b.hint') : t('b.dealerHint');
   // Tabella delle mani
   $('#handsHead').hidden = !g.hands.length; $('#handsWrap').hidden = !g.hands.length;
-  $('#hands').innerHTML = `<thead><tr><th>#</th>${g.players.map(p=>`<th title="${esc(p.name)}">${esc(p.name)}</th>`).join('')}</tr></thead><tbody>`+
+  $('#hands').innerHTML = `<thead><tr><th>#</th>${g.players.map(p=>`<th title="${esc(p.name)}"><i style="--c:${p.color}"></i>${esc(p.name)}</th>`).join('')}</tr></thead><tbody>`+
     g.hands.map((h,k)=>{
       /* Briscola: i punti delle carte senza "+", in evidenza chi ha vinto la mano */
       const bw = g.type==='briscola' ? briWinner(h.v) : -2;
@@ -493,6 +494,7 @@ function openHand(k){
   hd._upto = k==null ? g.hands.length : k;
   $('#handTitle').textContent = k==null ? t('hand.title',{n:g.hands.length+1}) : t('hand.edit',{n:k+1});
   $('#handDel').hidden = k==null; disarm($('#handDel'));
+  hideToast();   // l'avviso in basso coprirebbe l'anteprima della mano
   renderHand(); $('#hand').hidden=false;
   const f=$('#handBody input'); if(f && g.type!=='burraco') setTimeout(()=>{ try{ f.focus(); }catch(e){} },60);
 }
@@ -629,7 +631,8 @@ function openEnd(g, fromHistory){
   $('#eLabel').textContent = gameName(g)+' · '+fmtWhen(g.ended||g.started);
   $('#eWinner').textContent = w.length>1 ? t('end.tie') : g.players[w[0]].name;
   $('#eDetail').textContent = w.length>1 ? w.map(i=>g.players[i].name).join(' · ') : t('end.wins',{n:g.hands.length});
-  $('#eRank').innerHTML = rk.map((i,k)=>`<li style="--c:${g.players[i].color}"><span class="p">${k+1}</span><i></i><span class="nm">${esc(g.players[i].name)}${st.out[i]?' · '+esc(t('b.out')):''}${st.pts?`<small> · ${esc(t('bri.pts',{p:num(st.pts[i])}))}</small>`:''}</span><b>${num(st.tot[i])}</b></li>`).join('');
+  const pos=positions(g,st,rk);   // a pari punti stessa posizione, come sul tabellone
+  $('#eRank').innerHTML = rk.map(i=>`<li style="--c:${g.players[i].color}"><span class="p">${pos[i]}</span><i></i><span class="nm">${esc(g.players[i].name)}${st.out[i]?' · '+esc(t('b.out')):''}${st.pts?`<small> · ${esc(t('bri.pts',{p:num(st.pts[i])}))}</small>`:''}</span><b>${num(st.tot[i])}</b></li>`).join('');
   $('#eChart').innerHTML = chartSVG(g, st);
   $('#eAgain').textContent = t(fromHistory?'end.playAgain':'end.again');
   show('end');

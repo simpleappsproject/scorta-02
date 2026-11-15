@@ -177,6 +177,7 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .hands th,.hands td{padding:9px 8px;text-align:end;border-top:1px solid var(--line);font-size:.92rem;white-space:nowrap}
 .hands th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0;font-weight:700;overflow:hidden;text-overflow:ellipsis;max-width:80px}
 .hands td:first-child,.hands th:first-child{text-align:start;color:var(--muted)}
+.hands th i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-inline-end:4px;vertical-align:1px}
 .hands tr[data-hand]{cursor:pointer}
 .hands tr[data-hand]:active{background:var(--surface-2)}
 .hands .neg{color:var(--bad)}
@@ -264,7 +265,7 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .rank li b{font-family:var(--font-display);font-weight:800;font-size:1.35rem;font-variant-numeric:tabular-nums}
 .chart{margin-top:14px;padding:12px 8px 6px}
 .chart svg{width:100%;height:auto;display:block}
-.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 
 /* Storico */
 .hist{list-style:none;margin:0;padding:0}
@@ -333,11 +334,11 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
       <div class="win"><svg class="trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H4.5a3 3 0 0 0 3.5 4M16 6h3.5a3 3 0 0 1-3.5 4M12 13v4M8.5 20h7M10 17h4"/></svg>
         <p id="eLabel"></p><h3 id="eWinner"></h3><p id="eDetail"></p></div>
       <div class="panel"><ol class="rank" id="eRank"></ol></div>
-      <div class="panel chart" id="eChart"></div>
       <div class="end-actions">
         <button class="btn" id="eClose" data-i18n="end.close"></button>
         <button class="btn primary" id="eAgain" data-i18n="end.again"></button>
       </div>
+      <div class="panel chart" id="eChart"></div>
     </section>
     <section id="v-history" hidden>
       <div class="panel"><ul class="hist" id="hList"></ul></div>
