@@ -1,5 +1,5 @@
 (function(){
-const VERSION = '1.2.1';
+const VERSION = '1.2.2';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -348,8 +348,16 @@ function openSetup(k, from){
   else draft={type:k, players:defaultNames(k).map((name,i)=>({name, color:COLORS[i%COLORS.length], auto:true})), target:G.target, opts:{low:false, reentry:false, dbl:false}, firstDealer:0};
   renderSetup(); show('setup');
 }
+/* Scopa e Briscola: "Noi/Voi" solo con 2 squadre; con 3 o 4 ognuno gioca per sé, quindi "Giocatore 1, 2, 3…".
+   Si cambiano solo i nomi messi dall'app (auto), mai quelli scritti dall'utente. */
+function autoNames(){
+  if(!GAMES[draft.type].team) return;
+  const n=draft.players.length;
+  draft.players.forEach((p,i)=>{ if(p.auto) p.name = n===2 ? t(i===0?'su.us':'su.them') : t('su.player',{n:i+1}); });
+}
 function renderSetup(){
   const G=GAMES[draft.type];
+  autoNames();
   $('#suTitle').textContent = t('game.'+draft.type);
   $('#suSub').textContent = current ? t('su.replace') : '';
   $('#suPlayersLbl').textContent = G.team ? t('su.teams') : t('su.players');
@@ -358,7 +366,8 @@ function renderSetup(){
     ${draft.players.length>G.min?`<button class="x" data-prem="${i}" aria-label="${esc(t('su.remove'))}">×</button>`:''}</div>`).join('');
   const canMore = draft.players.length < G.max;
   $('#suAdd').hidden = !canMore;
-  $('#suAdd').innerHTML = esc(G.team ? t('su.addTeam') : t('su.add')) + (!pro && draft.players.length>=FREE_PLAYERS ? lockSVG : '');
+  $('#suAdd').innerHTML = esc(t('su.add'))   // nei giochi a squadre chi si aggiunge gioca per sé (Scopa e Briscola a 3 o 4)
+     + (!pro && draft.players.length>=FREE_PLAYERS ? lockSVG : '');
   const used=new Set(draft.players.map(p=>p.name.trim().toLowerCase()));
   const rec=recent.filter(n=>!used.has(n.toLowerCase())).slice(0,10);
   $('#suRecent').innerHTML = rec.map(n=>`<button data-recent="${esc(n)}">+ ${esc(n)}</button>`).join('');
