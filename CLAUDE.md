@@ -11,6 +11,7 @@
 - Gratis: Libero (fino a 6 giocatori), Scopa, Briscola (scelta del 15/11/2026, Francesco può spostarla in Pro con `pro:true` in `GAMES`), ultime 5 partite nello storico (le altre sono nascoste, non cancellate), backup/ripristino. Pro: Burraco, Scala 40, fino a 12 giocatori, storico completo e statistiche, esportazione CSV, dadi, colori.
 - Dati (Impostazioni → I tuoi dati): CSV con una riga per mano (UTF-8 con BOM, ";" nelle lingue con virgola decimale); backup JSON `{app:'simple-score', version:1, games, current, players, settings}` senza il Pro; il ripristino controlla il file (`parseBackup`), chiede conferma e sostituisce i dati, con Annulla.
 - Prova rapida: servi `www/` (`npm run serve`) e usa Playwright; in pagina c'è `window.__score` con `handValues`, `standings`, `briWinner`, `ranking`, `positions`, `winners`, `dealerOf`, `recompute`, `buildCSV`, `buildBackup`, `parseBackup`.
+- Screenshot dello store: `npm run serve` e poi `node tools/screenshots.js` (partite di esempio inventate, 6 immagini 1080×1920 in `store/screenshots-it` e `store/screenshots-en`; titoli in `SHOTS`).
 - GitHub Actions compila un APK di prova a ogni push su `main` e per ogni Pull Request.
 - Finché il repository si chiama `scorta-02` si lavora su `main`. Dopo la rinomina in `Simple-Score`: ramo `notturno` + Pull Request "Lavori notturni".
 - Stato e decisioni: documento `claude/simple-score-stato.md` nel Progetto "App".

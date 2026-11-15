@@ -44,7 +44,7 @@ Con un unico acquisto sblocchi:
 
 Tema chiaro e scuro. In 14 lingue.
 
-NOTE DI RILASCIO (versione 1.2.0, prima pubblicazione)
+NOTE DI RILASCIO (versione 1.2.1, prima pubblicazione)
 Prima versione di Simple Score.
 
 
@@ -88,5 +88,15 @@ One purchase unlocks:
 
 Light and dark theme. In 14 languages.
 
-RELEASE NOTES (version 1.2.0, first release)
+RELEASE NOTES (version 1.2.1, first release)
 First release of Simple Score.
+
+
+==================== SCREENSHOT (store/screenshots-it e screenshots-en, 1080×1920) ====================
+Si rifanno con:  npm run serve  (in un'altra finestra)  poi  node tools/screenshots.js
+1. Il punteggio, grande e chiaro. / Big, clear scores.
+2. Briscola: l'altra squadra si calcola da sola. / Briscola: the other side adds up by itself.
+3. Burraco: i conti li fa l'app. / Burraco: the app does the maths.
+4. Scopa in pochi tocchi. / Scopa in a few taps.
+5. Chi vince, anche a notte fonda. (tema scuro) / Who won, even late at night.
+6. Storico e statistiche. / History and statistics.
