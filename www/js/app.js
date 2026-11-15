@@ -31,10 +31,19 @@ const saveSettings = () => store.set('sc.settings', settings);
 const GAMES = {
   free:    {min:1, max:MAX_PLAYERS, def:2, targets:[0,50,100,200,500,1000], target:0},
   scopa:   {min:2, max:4, def:2, team:true, targets:[11,16,21], target:11},
+  /* Briscola: target = mani vinte che servono (2 = al meglio di 3, 3 = al meglio di 5, 0 = senza limite).
+     In 2 o in 3 ognuno per sé, in 4 a coppie (2 squadre). */
+  briscola:{min:2, max:3, def:2, team:true, targets:[1,2,3,0], target:2},
   burraco: {min:2, max:2, def:2, team:true, targets:[505,1005,2005], target:2005, pro:true},
   scala40: {min:2, max:6, def:3, low:true, targets:[101,151,201], target:101, pro:true}
 };
-const GAME_ORDER = ['free','scopa','burraco','scala40'];
+const GAME_ORDER = ['free','scopa','briscola','burraco','scala40'];
+/* Briscola: 120 punti in tutto nel mazzo; vince la mano chi fa più punti degli altri (in due: più di 60). 60 a 60 = pari (-1) */
+const BRI_TOTAL = 120;
+function briWinner(v){
+  const p=v.map(x=>+x||0), best=Math.max(...p), w=p.map((x,i)=>i).filter(i=>p[i]===best);
+  return w.length===1 ? w[0] : -1;
+}
 const isLow = g => g.type==='scala40' || (g.type==='free' && g.opts.low);
 
 /* Controllo di una partita (salvata, o letta da un backup): se è rovinata non deve bloccare l'app.
@@ -115,6 +124,13 @@ function handValues(g, d){
     /* pulito 200, sporco 100, carte in tavola +, carte in mano −, chiusura +100, pozzetto non preso −100 */
     return g.players.map((p,i)=> 200*(+d.cl[i]||0) + 100*(+d.sp[i]||0) + (+d.tav[i]||0) - (+d.man[i]||0) + (d.chiusura===i?100:0) - (d.pozz[i]?0:100));
   }
+  if(g.type==='briscola'){
+    /* si scrivono i punti di tutti tranne uno (d.auto): a lui va quello che manca per arrivare a 120 */
+    const a = briAuto(g, d);
+    const v = g.players.map((p,i)=> i===a ? 0 : (+d.v[i]||0));
+    v[a] = BRI_TOTAL - v.reduce((s,x)=>s+x,0);
+    return v;
+  }
   if(g.type==='scala40'){
     const out = standings(g, d._upto).out;
     /* raddoppio solo se è attivo nelle regole e qualcuno ha chiuso */
@@ -123,14 +139,22 @@ function handValues(g, d){
   }
   return Array.from({length:n},(x,i)=>+d.v[i]||0);
 }
+const briAuto = (g, d) => (Number.isInteger(d.auto) && d.auto>=0 && d.auto<g.players.length) ? d.auto : g.players.length-1;
 /* Totali, eliminati, rientri e andamento mano per mano. upto = considera solo le prime "upto" mani.
    outAt[i] = numero della mano (da 0) in cui il giocatore è stato eliminato, -1 se è in gioco.
    outHist[k] = chi era eliminato dopo k mani (serve per far girare il mazziere). */
 function standings(g, upto){
   const n=g.players.length, hands=g.hands.slice(0, upto==null ? g.hands.length : upto);
   const tot=Array(n).fill(0), out=Array(n).fill(false), re=Array(n).fill(0), outAt=Array(n).fill(-1), hist=[tot.slice()], outHist=[out.slice()];
+  /* Briscola: tot = mani vinte (60 a 60 non conta per nessuno); pts = somma dei punti delle carte, ptsHist = andamento dei punti */
+  const bri = g.type==='briscola', pts=Array(n).fill(0), ptsHist=[pts.slice()];
   hands.forEach((h,k)=>{
-    for(let i=0;i<n;i++) if(!out[i]) tot[i]+= (+h.v[i]||0);
+    if(bri){
+      const w=briWinner(h.v); if(w>=0) tot[w]++;
+      for(let i=0;i<n;i++) pts[i]+= (+h.v[i]||0);
+      ptsHist.push(pts.slice());
+    }
+    else for(let i=0;i<n;i++) if(!out[i]) tot[i]+= (+h.v[i]||0);
     if(g.type==='scala40'){
       const lim=g.target;
       const over=[...Array(n).keys()].filter(i=>!out[i] && tot[i]>=lim);
@@ -143,14 +167,17 @@ function standings(g, upto){
     }
     hist.push(tot.slice()); outHist.push(out.slice());
   });
-  return {tot, out, re, outAt, hist, outHist};
+  const r={tot, out, re, outAt, hist, outHist};
+  if(bri){ r.pts=pts; r.ptsHist=ptsHist; }
+  return r;
 }
 /* Classifica: indici dei giocatori dal primo all'ultimo */
 function ranking(g, st){
   st = st || standings(g);
   const low=isLow(g);
   /* chi è eliminato va in fondo; tra gli eliminati è più in alto chi è uscito più tardi */
-  return [...g.players.keys()].sort((a,b)=> (st.out[a]-st.out[b]) || (st.out[a] ? st.outAt[b]-st.outAt[a] : 0) || (low ? st.tot[a]-st.tot[b] : st.tot[b]-st.tot[a]));
+  /* Briscola: a pari mani vinte si mostra prima chi ha più punti (ma la posizione resta la stessa, vedi positions) */
+  return [...g.players.keys()].sort((a,b)=> (st.out[a]-st.out[b]) || (st.out[a] ? st.outAt[b]-st.outAt[a] : 0) || (low ? st.tot[a]-st.tot[b] : st.tot[b]-st.tot[a]) || (st.pts ? st.pts[b]-st.pts[a] : 0));
 }
 /* Posizione in classifica (1 = primo); a pari punti stessa posizione */
 function positions(g, st, rk){
@@ -281,6 +308,7 @@ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
 const ICON = {
   free:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/><path d="M18 15v6M15 18h6"/></svg>',
   scopa:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M12 7.5c1.8 1.6 3 2.8 3 4.3a3 3 0 0 1-6 0c0-1.5 1.2-2.7 3-4.3zM12 15v2.5"/></svg>',
+  briscola:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M12 6.5v8.5M9.5 15h5M12 15v2.5"/></svg>',
   burraco:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="6" width="10" height="14" rx="2" transform="rotate(-12 7.5 13)"/><rect x="7" y="4.5" width="10" height="14" rx="2"/><rect x="11.5" y="6" width="10" height="14" rx="2" transform="rotate(12 16.5 13)"/></svg>',
   scala40:'<svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="12" width="5" height="8" rx="1.2"/><rect x="9.5" y="8" width="5" height="12" rx="1.2"/><rect x="16" y="4" width="5" height="16" rx="1.2"/></svg>'
 };
@@ -292,7 +320,9 @@ function renderHome(){
   if(current){
     const st=standings(current), rk=ranking(current,st);
     r.hidden=false;
-    r.innerHTML=`<div><b>${esc(t('home.resume',{game:gameName(current)}))}</b><small>${esc(t('home.resumeInfo',{n:current.hands.length, lead:current.players[rk[0]].name, pts:num(st.tot[rk[0]])}))}</small></div><span class="go">${esc(t('home.go'))} →</span>`;
+    /* Briscola: al posto dei punti si mostrano le mani vinte, es. 2–1 */
+    const lp = current.type==='briscola' ? rk.map(i=>num(st.tot[i])).join('–') : num(st.tot[rk[0]]);
+    r.innerHTML=`<div><b>${esc(t('home.resume',{game:gameName(current)}))}</b><small>${esc(t('home.resumeInfo',{n:current.hands.length, lead:current.players[rk[0]].name, pts:lp}))}</small></div><span class="go">${esc(t('home.go'))} →</span>`;
   } else r.hidden=true;
   $('#games').innerHTML = GAME_ORDER.map(k=>`<button class="game" data-game="${k}">${ICON[k]}${GAMES[k].pro&&!pro?lockSVG:''}<b>${esc(t('game.'+k))}</b><small>${esc(t('game.'+k+'.h'))}</small></button>`).join('');
 }
@@ -332,12 +362,16 @@ function renderSetup(){
   const rec=recent.filter(n=>!used.has(n.toLowerCase())).slice(0,10);
   $('#suRecent').innerHTML = rec.map(n=>`<button data-recent="${esc(n)}">+ ${esc(n)}</button>`).join('');
   // Opzioni
-  const tg = G.targets.map(v=>`<button data-target="${v}" aria-pressed="${draft.target===v}">${v? num(v) : esc(t('su.noTarget'))}</button>`).join('');
+  const tLabel = v => !v ? esc(t('su.noTarget')) : draft.type!=='briscola' ? num(v) : esc(briLabel(v));
+  const tg = G.targets.map(v=>`<button data-target="${v}" aria-pressed="${draft.target===v}">${tLabel(v)}</button>`).join('');
   let o = `<div class="opt-row" style="flex-direction:column;align-items:stretch"><div><b>${esc(t('su.target.'+draft.type))}</b><small>${esc(t('su.target.'+draft.type+'.h'))}</small></div><div class="seg" role="group">${tg}</div></div>`;
+  if(draft.type==='briscola') o += `<p class="hint" style="text-align:start;margin:10px 0 2px">${esc(t('bri.setup'))}</p>`;
   if(draft.type==='free') o += switchRow('low', t('su.low'), t('su.low.h'));
   if(draft.type==='scala40'){ o += switchRow('reentry', t('su.reentry'), t('su.reentry.h')) + switchRow('dbl', t('su.dbl'), t('su.dbl.h')); }
   $('#suOptions').innerHTML = o;
 }
+/* Briscola: 1 = "Secca", 2 = "2 su 3", 3 = "3 su 5" */
+const briLabel = v => v===1 ? t('bri.t1') : t('bri.tN',{a:num(v), b:num(2*v-1)});
 const switchRow = (k,label,help) => `<div class="opt-row"><label for="opt-${k}"><b>${esc(label)}</b><small>${esc(help)}</small></label><span class="switch"><input type="checkbox" id="opt-${k}" data-opt="${k}" ${draft.opts[k]?'checked':''}><span></span></span></div>`;
 $('#suPlayers').addEventListener('input',e=>{ const i=e.target.dataset.pname; if(i!=null){ draft.players[i].name=e.target.value; draft.players[i].auto=false; } });
 $('#suPlayers').addEventListener('click',e=>{
@@ -391,7 +425,8 @@ function renderBoard(){
   const held = !!w && g.hold===handsSig(g);
   if(w && !held){ finishGame(w); return; }
   $('#bName').textContent = gameName(g);
-  $('#bInfo').textContent = t(g.type!=='free' ? 'b.info.'+g.type : !g.target ? 'b.info.free0' : g.opts.low ? 'b.info.freeLow' : 'b.info.free', {t:num(g.target), n:g.hands.length});
+  $('#bInfo').textContent = g.type==='briscola' ? t(g.target>1 ? 'b.info.briscola' : 'b.info.briscola'+g.target, {t:num(2*g.target-1)})
+    : t(g.type!=='free' ? 'b.info.'+g.type : !g.target ? 'b.info.free0' : g.opts.low ? 'b.info.freeLow' : 'b.info.free', {t:num(g.target), n:g.hands.length});
   const cols = n<=2 ? 2 : n<=4 ? 2 : 3;
   const tiles=$('#tiles'); tiles.style.setProperty('--cols',cols); tiles.classList.toggle('many', n>4);
   const lead = g.hands.length ? rk[0] : -1;   // in testa (a pari punti anche gli altri primi)
@@ -403,6 +438,7 @@ function renderBoard(){
     return `<div class="tile${first?' lead':''}${out?' out':''}" style="--c:${p.color}">
       <div class="tn"><span>${esc(p.name)}</span></div>
       <div class="tt">${num(st.tot[i])}</div>
+      ${st.pts?`<div class="tp">${esc(t('bri.pts',{p:num(st.pts[i])}))}</div>`:''}
       <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}">${cardsSVG}${esc(t('b.dealer'))}</button>`:''}</div>
       ${g.target?`<div class="bar"><i style="--w:${pct}%"></i></div>`:''}
     </div>`;
@@ -412,7 +448,11 @@ function renderBoard(){
   // Tabella delle mani
   $('#handsHead').hidden = !g.hands.length; $('#handsWrap').hidden = !g.hands.length;
   $('#hands').innerHTML = `<thead><tr><th>#</th>${g.players.map(p=>`<th title="${esc(p.name)}">${esc(p.name)}</th>`).join('')}</tr></thead><tbody>`+
-    g.hands.map((h,k)=>`<tr data-hand="${k}"><td>${k+1}</td>${g.players.map((p,i)=>{ const v=+h.v[i]||0; return `<td class="${v<0?'neg':''}">${v>0&&g.type!=='scala40'?'+':''}${num(v)}</td>`; }).join('')}</tr>`).reverse().join('')+'</tbody>';
+    g.hands.map((h,k)=>{
+      /* Briscola: i punti delle carte senza "+", in evidenza chi ha vinto la mano */
+      const bw = g.type==='briscola' ? briWinner(h.v) : -2;
+      return `<tr data-hand="${k}"><td>${k+1}</td>${g.players.map((p,i)=>{ const v=+h.v[i]||0; return `<td class="${v<0?'neg':''}${bw===i?' won':''}">${v>0&&g.type!=='scala40'&&bw===-2?'+':''}${num(v)}</td>`; }).join('')}</tr>`;
+    }).reverse().join('')+'</tbody>';
   disarm($('#bEnd')); disarm($('#bUndo'));
 }
 $('#tiles').addEventListener('click',e=>{
@@ -446,8 +486,10 @@ function openHand(k){
   else if(g.type==='scopa') hd={carte:-1, denari:-1, sette:-1, primiera:-1, scope:Array(n).fill(0)};
   else if(g.type==='burraco') hd={cl:[0,0], sp:[0,0], tav:['',''], man:['',''], chiusura:-1, pozz:[true,true]};
   else if(g.type==='scala40') hd={v:Array(n).fill(''), closed:-1, dbl:false};
+  else if(g.type==='briscola') hd={v:Array(n).fill(''), auto:n-1};
   else hd={v:Array(n).fill(''), neg:Array(n).fill(false)};
   if(g.type==='free' && !hd.neg) hd.neg = hd.v.map(x=>+x<0);
+  if(g.type==='briscola'){ hd.auto=briAuto(g,hd); hd.ord=[]; }   // ord = campi scritti, dall'ultimo toccato
   hd._upto = k==null ? g.hands.length : k;
   $('#handTitle').textContent = k==null ? t('hand.title',{n:g.hands.length+1}) : t('hand.edit',{n:k+1});
   $('#handDel').hidden = k==null; disarm($('#handDel'));
@@ -479,23 +521,55 @@ function renderHand(){
     h += `<div class="pickrow"><b>${esc(t('s40.closed'))}</b>${pickSeg('closed',hd.closed,true,t('hand.nobody'))}</div>`;
     if(g.opts.dbl) h += `<div class="opt-row" style="padding:10px 0"><label for="s40dbl"><b>${esc(t('s40.dbl'))}</b><small>${esc(t('s40.dbl.h'))}</small></label><span class="switch"><input type="checkbox" id="s40dbl" data-dbl ${hd.dbl?'checked':''}><span></span></span></div>`;
     h += `<p class="hint" style="text-align:start">${esc(t('s40.values'))}</p>`;
+  } else if(g.type==='briscola'){
+    h += P.map((p,i)=>`<div class="hrow"><span class="who" style="--c:${p.color}"><i></i><span>${esc(p.name)}</span></span>${numIn('v',i,hd.v[i],{label:p.name})}</div>`).join('');
+    h += `<p class="hint" style="text-align:start">${esc(t('bri.auto'))} ${esc(t('bri.values'))}</p>`;
   } else {
     h += P.map((p,i)=>`<div class="hrow"><span class="who" style="--c:${p.color}"><i></i><span>${esc(p.name)}</span></span>${numIn('v',i,hd.v[i],{sign:true, label:p.name})}</div>`).join('');
   }
   $('#handBody').innerHTML=h;
+  if(g.type==='briscola') briSync();
   if(g.type==='scala40') $('#handBody').querySelectorAll('[data-pick="closed"]').forEach(b=>b.disabled=standings(g,hd._upto).out[+b.dataset.v]);
   renderPreview();
 }
 function readFree(){ if(current.type==='free') hd.v = hd.v.map((x,i)=> x===''?'':(hd.neg[i]?-Math.abs(+x):Math.abs(+x))); }
+/* Briscola: il campo "auto" (in grigio) mostra da solo quello che manca per arrivare a 120 */
+const briTyped = () => hd.v.some((x,i)=> i!==hd.auto && x!=='');
+function briSync(){
+  const v=handValues(current, hd), typed=briTyped();
+  $('#handBody').querySelectorAll('[data-in="v"]').forEach(el=>{
+    const i=+el.dataset.i, a=i===hd.auto;
+    el.classList.toggle('auto', a);
+    if(a) el.value = typed && v[i]>=0 && v[i]<=BRI_TOTAL ? String(v[i]) : '';
+    el.placeholder = a ? String(BRI_TOTAL) : '0';
+  });
+}
 function renderPreview(){
   const g=current; readFree();
   const v=handValues(g, hd);
+  if(g.type==='briscola'){
+    if(!briTyped()){ $('#handPreview').innerHTML=''; return; }
+    const bad=v.some(x=>x<0||x>BRI_TOTAL), w=briWinner(v);
+    $('#handPreview').innerHTML = g.players.map((p,i)=>`<span style="--c:${p.color}"><i></i>${esc(p.name)}: ${num(v[i])}</span>`).join('')
+      + `<span class="${bad?'warn':'res'}">${esc(bad ? t('bri.over') : w>=0 ? t('bri.handWin',{name:g.players[w].name}) : t('bri.handTie'))}</span>`;
+    return;
+  }
   $('#handPreview').innerHTML = g.players.map((p,i)=>`<span style="--c:${p.color}"><i></i>${esc(p.name)}: ${v[i]>0&&g.type!=='scala40'?'+':''}${num(v[i])}</span>`).join('');
 }
 $('#handBody').addEventListener('input',e=>{
   const k=e.target.dataset.in; if(!k) return;
   const i=+e.target.dataset.i; const clean=e.target.value.replace(/[^\d]/g,'').slice(0,5);
   if(clean!==e.target.value) e.target.value=clean;
+  if(k==='v' && current.type==='briscola'){
+    /* si scrive in un campo qualsiasi: si calcola da solo quello non toccato da più tempo */
+    const n=current.players.length, c=clean.slice(0,3);
+    if(c!==e.target.value) e.target.value=c;
+    hd.v[i] = c==='' ? '' : +c;
+    hd.ord = (hd.ord||[]).filter(x=>x!==i).concat(i);
+    const keep = hd.ord.slice(-(n-1));
+    if(keep.includes(hd.auto)){ const cand=[...Array(n).keys()].filter(x=>!keep.includes(x)); hd.auto=cand[cand.length-1]; hd.v[hd.auto]=''; }
+    briSync(); renderPreview(); return;
+  }
   if(k==='v' && current.type==='free'){ hd.v[i]= clean===''?'':(hd.neg[i]?-+clean:+clean); }
   else hd[k][i]= clean===''?'':+clean;
   renderPreview();
@@ -520,8 +594,13 @@ $('#handSave').addEventListener('click',()=>{
   const g=current; readFree();
   if(g.type==='scopa' && hd.sette<0){ toast(t('scopa.needSette')); return; }
   if(g.type==='burraco' && hd.chiusura>=0 && (+hd.cl[hd.chiusura]||0)+(+hd.sp[hd.chiusura]||0)<1){ toast(t('bur.needBurraco')); return; }
+  if(g.type==='briscola'){
+    if(!briTyped()){ toast(t('bri.needPts')); return; }
+    if(handValues(g, hd).some(x=>x<0||x>BRI_TOTAL)){ toast(t('bri.over')); return; }
+  }
   const v=handValues(g, hd);
   const d=JSON.parse(JSON.stringify(hd)); delete d._upto;
+  if(g.type==='briscola'){ d.v=v.slice(); delete d.ord; }
   const entry={v, d};
   if(hk==null) g.hands.push(entry); else g.hands[hk]=entry;
   recompute(g);   // Scala 40: le mani successive dipendono da chi era eliminato
@@ -550,7 +629,7 @@ function openEnd(g, fromHistory){
   $('#eLabel').textContent = gameName(g)+' · '+fmtWhen(g.ended||g.started);
   $('#eWinner').textContent = w.length>1 ? t('end.tie') : g.players[w[0]].name;
   $('#eDetail').textContent = w.length>1 ? w.map(i=>g.players[i].name).join(' · ') : t('end.wins',{n:g.hands.length});
-  $('#eRank').innerHTML = rk.map((i,k)=>`<li style="--c:${g.players[i].color}"><span class="p">${k+1}</span><i></i><span class="nm">${esc(g.players[i].name)}${st.out[i]?' · '+esc(t('b.out')):''}</span><b>${num(st.tot[i])}</b></li>`).join('');
+  $('#eRank').innerHTML = rk.map((i,k)=>`<li style="--c:${g.players[i].color}"><span class="p">${k+1}</span><i></i><span class="nm">${esc(g.players[i].name)}${st.out[i]?' · '+esc(t('b.out')):''}${st.pts?`<small> · ${esc(t('bri.pts',{p:num(st.pts[i])}))}</small>`:''}</span><b>${num(st.tot[i])}</b></li>`).join('');
   $('#eChart').innerHTML = chartSVG(g, st);
   $('#eAgain').textContent = t(fromHistory?'end.playAgain':'end.again');
   show('end');
@@ -677,11 +756,12 @@ function buildCSV(list, sep){
   const rows=[head];
   gs.forEach((g,gi)=>{
     const st=standings(g), win=(g.winners||[]).map(i=>g.players[i]&&g.players[i].name).filter(Boolean).join(' / ');
-    const name=gameName(g)+(g.target?' '+g.target:''), when=localStamp(g.started||g.ended);
+    const name=gameName(g)+(!g.target ? '' : g.type==='briscola' ? ' '+briLabel(g.target) : ' '+g.target), when=localStamp(g.started||g.ended);
     g.hands.forEach((h,k)=>{
       const r=[gi+1, when, name, k+1];
       for(let i=0;i<maxP;i++){
-        if(i<g.players.length) r.push(g.players[i].name, +h.v[i]||0, st.hist[k+1][i]);
+        /* Briscola: "Punti" = punti delle carte nella mano, "Totale" = somma dei punti (le mani vinte si vedono dal vincitore di ogni riga) */
+        if(i<g.players.length) r.push(g.players[i].name, +h.v[i]||0, (st.ptsHist||st.hist)[k+1][i]);
         else r.push('','','');
       }
       r.push(win); rows.push(r);
@@ -788,5 +868,5 @@ show(current ? 'board' : 'home');
 N.billing.init(setPro);
 
 /* Per le prove automatiche (Playwright) */
-window.__score = {handValues, standings, ranking, positions, winners, dealerOf, recompute, buildCSV, buildBackup, parseBackup, get current(){ return current; }, get games(){ return games; }};
+window.__score = {handValues, standings, briWinner, ranking, positions, winners, dealerOf, recompute, buildCSV, buildBackup, parseBackup, get current(){ return current; }, get games(){ return games; }};
 })();
