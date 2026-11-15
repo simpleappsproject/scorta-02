@@ -121,6 +121,13 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .pro-row b{display:block}
 .pro-row small{display:block;color:var(--muted);font-size:.82rem}
 .pro-row .btn{padding:10px 16px;flex:none}
+.rowbtn{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;padding:13px 14px;border-top:1px solid var(--line);text-align:start;font-weight:600}
+.rowbtn:first-child{border-top:0}
+.rowbtn small{display:block;color:var(--muted);font-size:.82rem;font-weight:400}
+.rowbtn .arr{color:var(--muted);flex:none}
+[dir=rtl] .rowbtn .arr{transform:scaleX(-1)}
+.confirm-text{margin:0 0 8px}
+.confirm-warn{margin:0 0 6px;color:var(--bad);font-weight:600;font-size:.92rem}
 .about{color:var(--muted);font-size:.82rem;text-align:center;margin:18px 8px 0}
 .about a{color:var(--muted)}
 
@@ -331,6 +338,9 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
     </section>
     <section id="v-settings" hidden>
       <div class="panel" id="settingsPanel"></div>
+      <div class="section-head"><h2 data-i18n="set.data"></h2></div>
+      <div class="panel" id="dataPanel"></div>
+      <input type="file" id="importFile" hidden>
       <p class="about"><span data-i18n="set.about"></span><br>v<span id="ver"></span> · Simple Apps · <a href="privacy.html" data-i18n="set.privacy"></a></p>
     </section>
   </main>
@@ -385,6 +395,17 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
       <button class="link" id="proClose" data-i18n="pro.close"></button>
     </div>
     <p class="pro-msg" id="proMsg" role="status"></p>
+  </div>
+</div>
+<div class="sheet" id="confirm" hidden>
+  <div class="sheet-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+    <div class="sheet-top"><h3 id="confirmTitle"></h3></div>
+    <p class="confirm-text" id="confirmText"></p>
+    <p class="confirm-warn" id="confirmWarn"></p>
+    <div class="sheet-actions">
+      <button class="btn" id="confirmNo" data-i18n="hand.cancel"></button>
+      <button class="btn primary" id="confirmYes"></button>
+    </div>
   </div>
 </div>
 <div class="toast" id="toast" role="status" hidden><span id="toastText"></span><button id="toastUndo" data-i18n="toast.undo"></button></div>

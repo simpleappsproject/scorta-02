@@ -52,6 +52,31 @@
     P.App.addListener('resume', fn);
   }
 
+  /* ---------- Salvataggio di un file (storico CSV, backup) ----------
+     Sul telefono: il file va nella cache dell'app e si apre la finestra "Condividi" di Android
+     (Drive, email, WhatsApp, "Salva nei file"...). Nel browser: download normale.
+     Risultato: 'ok' | 'cancelled' | 'error' */
+  async function saveFile(name, text, mime){
+    if(isNative && P.Filesystem && P.Share){
+      try{
+        const w = await P.Filesystem.writeFile({path:name, data:text, directory:'CACHE', encoding:'utf8'});
+        await P.Share.share({title:'Simple Score', url:w.uri, dialogTitle:name});
+        return 'ok';
+      }catch(e){
+        const msg = String((e && (e.message||e.code)) || e).toLowerCase();
+        return msg.includes('cancel') ? 'cancelled' : 'error';
+      }
+    }
+    try{
+      const blob = new Blob([text], {type: mime||'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+      return 'ok';
+    }catch(e){ return 'error'; }
+  }
+
   /* ---------- Acquisto unico "Simple Score Pro" (Google Play Billing) ---------- */
   const NP = P.NativePurchases;
   const billing = {
@@ -109,5 +134,5 @@
     }
   };
 
-  window.Native = {isNative, keepAwake, vibrate, setBars, onBack, onResume, billing};
+  window.Native = {isNative, keepAwake, vibrate, setBars, onBack, onResume, saveFile, billing};
 })();

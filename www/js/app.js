@@ -210,7 +210,7 @@ function setPro(v){
 let proFrom=null;
 function openPro(reason){
   proFrom = document.activeElement;
-  const leads={game:t('pro.lead.game'), players:t('pro.lead.players',{max:FREE_PLAYERS}), history:t('pro.lead.history'), dice:t('pro.lead.dice'), style:t('pro.lead.style')};
+  const leads={game:t('pro.lead.game'), players:t('pro.lead.players',{max:FREE_PLAYERS}), history:t('pro.lead.history'), dice:t('pro.lead.dice'), style:t('pro.lead.style'), export:t('pro.lead.export')};
   $('#proLead').textContent = leads[reason] || t('pro.lead');
   $('#proMsg').textContent = N.billing.available ? '' : t('pro.web');
   renderProBuy(false);
@@ -636,6 +636,10 @@ function renderSettings(){
         `<button class="chip" data-accent="${k}" aria-pressed="${k===acc}" aria-label="${esc(t('accent.'+k))}${!pro&&k!=='green'?' – '+esc(t('set.locked')):''}" style="--c:${isDark()?c[1]:c[0]}"><i></i>${!pro&&k!=='green'?lockSVG:''}</button>`).join('')}</div></div>`
     + `<div class="toggle" style="padding:0">${proRow}</div>`;
   const pb=$('#setPro'); if(pb) pb.addEventListener('click',()=>openPro());
+  $('#dataPanel').innerHTML =
+    `<button class="rowbtn" data-act="csv"><span>${esc(t('data.csv'))}${pro?'':lockSVG}<small>${esc(t('data.csv.h'))}</small></span><span class="arr">›</span></button>`
+    + `<button class="rowbtn" data-act="export"><span>${esc(t('data.export'))}<small>${esc(t('data.export.h'))}</small></span><span class="arr">›</span></button>`
+    + `<button class="rowbtn" data-act="import"><span>${esc(t('data.import'))}<small>${esc(t('data.import.h'))}</small></span><span class="arr">›</span></button>`;
   $('#ver').textContent=VERSION;
 }
 $('#settingsPanel').addEventListener('change',e=>{
@@ -648,8 +652,114 @@ $('#settingsPanel').addEventListener('click',e=>{
   else if(a){ if(!pro && a.dataset.accent!=='green'){ openPro('style'); return; } settings.accent=a.dataset.accent; saveSettings(); applyTheme(); renderSettings(); }
 });
 
+/* ---------- Esportazione dello storico (CSV) e backup ---------- */
+const pad2 = n => String(n).padStart(2,'0');
+/* data e ora locali scritte come 2026-11-15 21:30: Excel e Fogli le riconoscono come data in ogni lingua */
+function localStamp(iso){ const d=new Date(iso); if(isNaN(d)) return ''; return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+' '+pad2(d.getHours())+':'+pad2(d.getMinutes()); }
+const today = () => localStamp(new Date().toISOString()).slice(0,10);
+/* Separatore delle colonne come lo vuole Excel nella lingua scelta: ";" dove i decimali hanno la virgola (italiano, tedesco, francese…), "," altrove */
+function csvSep(){ try{ return new Intl.NumberFormat(locale()).format(1.5).includes(',') ? ';' : ','; }catch(e){ return ';'; } }
+/* CSV: una riga per mano. Per ogni posto al tavolo tre colonne: nome, punti della mano, totale dopo la mano.
+   L'ultima riga di ogni partita ha quindi i totali finali; "Vincitore" è ripetuto su tutte le righe per poter filtrare. */
+function buildCSV(list, sep){
+  sep = sep || csvSep();
+  const cell = x => {
+    if(typeof x==='number') return String(x);
+    let s=String(x==null?'':x);
+    if(/^[=+\-@\t\r]/.test(s)) s="'"+s;           // un nome come "=1+1" non deve diventare una formula
+    return (s.includes(sep) || /["\r\n]/.test(s)) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  };
+  const gs=list.slice().sort((a,b)=> String(a.started||'') < String(b.started||'') ? -1 : 1);   // dalla più vecchia
+  const maxP=Math.max(1,...gs.map(g=>g.players.length));
+  const head=[t('csv.game'), t('csv.date'), t('csv.type'), t('csv.hand')];
+  for(let k=1;k<=maxP;k++) head.push(t('csv.player',{n:k}), t('csv.points',{n:k}), t('csv.total',{n:k}));
+  head.push(t('csv.winner'));
+  const rows=[head];
+  gs.forEach((g,gi)=>{
+    const st=standings(g), win=(g.winners||[]).map(i=>g.players[i]&&g.players[i].name).filter(Boolean).join(' / ');
+    const name=gameName(g)+(g.target?' '+g.target:''), when=localStamp(g.started||g.ended);
+    g.hands.forEach((h,k)=>{
+      const r=[gi+1, when, name, k+1];
+      for(let i=0;i<maxP;i++){
+        if(i<g.players.length) r.push(g.players[i].name, +h.v[i]||0, st.hist[k+1][i]);
+        else r.push('','','');
+      }
+      r.push(win); rows.push(r);
+    });
+  });
+  return '\uFEFF' + rows.map(r=>r.map(cell).join(sep)).join('\r\n') + '\r\n';   // \uFEFF (BOM) = Excel legge bene gli accenti
+}
+function buildBackup(){
+  return {app:'simple-score', version:1, appVersion:VERSION, exported:new Date().toISOString(),
+    games, current, players:recent, settings:{lang:settings.lang, theme:settings.theme, accent:settings.accent, awake:settings.awake}};
+}
+/* Legge un backup e lo controlla. Restituisce i dati puliti, oppure null se il file non va bene. Il Pro non si ripristina da file (dipende dall'acquisto). */
+function parseBackup(text){
+  let d=null; try{ d=JSON.parse(String(text).replace(/^\uFEFF/,'')); }catch(e){ return null; }
+  if(!d || typeof d!=='object' || d.app!=='simple-score' || !Array.isArray(d.games)) return null;
+  const copy = x => JSON.parse(JSON.stringify(x));
+  const gs=d.games.filter(validGame).map(g=>normGame(copy(g)));
+  if(d.games.length && !gs.length) return null;
+  const cur = validGame(d.current) ? normGame(copy(d.current)) : null;
+  const pl = Array.isArray(d.players) ? d.players.filter(x=>typeof x==='string').slice(0,20) : [];
+  const s0 = (d.settings && typeof d.settings==='object') ? d.settings : {}, se={};
+  if(s0.lang==='auto' || LANGS.includes(s0.lang)) se.lang=s0.lang;
+  if(['auto','light','dark'].includes(s0.theme)) se.theme=s0.theme;
+  if(ACCENTS[s0.accent]) se.accent=s0.accent;
+  if(typeof s0.awake==='boolean') se.awake=s0.awake;
+  return {games:gs, current:cur, players:pl, settings:se, exported:typeof d.exported==='string'?d.exported:''};
+}
+function restoreBackup(b){
+  const old={games, current, recent, settings:{...settings}};
+  const apply = x => {
+    games=x.games; current=x.current; recent=x.recent; settings=Object.assign({}, settings, x.settings);
+    saveGames(); saveCurrent(); store.set('sc.players', recent); saveSettings();
+    applyTheme(); renderAll();
+  };
+  apply({games:b.games, current:b.current, recent:b.players, settings:b.settings});
+  toast(t('data.restored'), ()=>apply(old));
+}
+/* Finestra di conferma */
+let confirmFn=null;
+function askConfirm(title, text, warn, okLabel, fn){
+  $('#confirmTitle').textContent=title; $('#confirmText').textContent=text; $('#confirmWarn').textContent=warn||''; $('#confirmWarn').hidden=!warn;
+  $('#confirmYes').textContent=okLabel; confirmFn=fn; $('#confirm').hidden=false; $('#confirmNo').focus();
+}
+function closeConfirm(){ $('#confirm').hidden=true; confirmFn=null; }
+$('#confirmNo').addEventListener('click',closeConfirm);
+$('#confirm').addEventListener('click',e=>{ if(e.target.id==='confirm') closeConfirm(); });
+$('#confirmYes').addEventListener('click',()=>{ const f=confirmFn; closeConfirm(); if(f) f(); });
+
+$('#dataPanel').addEventListener('click',async e=>{
+  const b=e.target.closest('[data-act]'); if(!b) return;
+  const a=b.dataset.act;
+  if(a==='csv'){
+    if(!pro){ openPro('export'); return; }
+    if(!games.length){ toast(t('data.none')); return; }
+    const r=await N.saveFile(`simple-score-${today()}.csv`, buildCSV(games), 'text/csv;charset=utf-8');
+    if(r==='error') toast(t('data.error'));
+  }
+  if(a==='export'){
+    const r=await N.saveFile(`simple-score-backup-${today()}.json`, JSON.stringify(buildBackup()), 'application/json');
+    if(r==='error') toast(t('data.error'));
+  }
+  if(a==='import'){ $('#importFile').value=''; $('#importFile').click(); }
+});
+$('#importFile').addEventListener('change',async()=>{
+  const f=$('#importFile').files[0]; if(!f) return;
+  $('#importFile').value='';   // così si può scegliere di nuovo lo stesso file
+  let b=null;
+  if(f.size < 20*1024*1024){ try{ b=parseBackup(await f.text()); }catch(e){ b=null; } }
+  if(!b){ toast(t('data.bad')); return; }
+  const when = b.exported ? fmtWhen(b.exported) : '?';
+  let text = t('data.confirm.text',{date:when, n:b.games.length});
+  if(b.current) text += ' ' + t('data.confirm.current');
+  askConfirm(t('data.confirm.title'), text, t('data.confirm.warn'), t('data.confirm.ok'), ()=>restoreBackup(b));
+});
+
 /* ---------- Tasto Indietro ---------- */
 function goBack(){
+  if(!$('#confirm').hidden){ closeConfirm(); return true; }
   if(!$('#pro').hidden){ closePro(); return true; }
   if(!$('#hand').hidden){ closeHand(); return true; }
   if(!$('#diceSheet').hidden){ closeDice(); return true; }
@@ -678,5 +788,5 @@ show(current ? 'board' : 'home');
 N.billing.init(setPro);
 
 /* Per le prove automatiche (Playwright) */
-window.__score = {handValues, standings, ranking, positions, winners, dealerOf, recompute, get current(){ return current; }, get games(){ return games; }};
+window.__score = {handValues, standings, ranking, positions, winners, dealerOf, recompute, buildCSV, buildBackup, parseBackup, get current(){ return current; }, get games(){ return games; }};
 })();
