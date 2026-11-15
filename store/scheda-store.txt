@@ -43,7 +43,7 @@ Con un unico acquisto sblocchi:
 
 Tema chiaro e scuro. In 14 lingue.
 
-NOTE DI RILASCIO (versione 1.0.0)
+NOTE DI RILASCIO (versione 1.1.0, prima pubblicazione)
 Prima versione di Simple Score.
 
 
@@ -86,5 +86,5 @@ One purchase unlocks:
 
 Light and dark theme. In 14 languages.
 
-RELEASE NOTES (version 1.0.0)
+RELEASE NOTES (version 1.1.0, first release)
 First release of Simple Score.
