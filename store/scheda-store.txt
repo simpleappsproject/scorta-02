@@ -8,7 +8,7 @@ NOME APP (max 30 caratteri)
 Simple Score: Segnapunti
 
 DESCRIZIONE BREVE (max 80 caratteri)
-Segnapunti per Burraco, Scala 40, Scopa e ogni gioco. Senza pubblicità.
+Segnapunti per Burraco, Scala 40, Scopa, Briscola e altro. Senza pubblicità.
 
 DESCRIZIONE COMPLETA
 Simple Score è il segnapunti per le serate di carte e giochi da tavolo. Niente carta e penna, niente conti sbagliati, niente pubblicità a ogni punto.
@@ -18,6 +18,7 @@ Tutti i giocatori sullo schermo con numeri grandi, la posizione in classifica e 
 
 I GIOCHI ITALIANI GIÀ PRONTI
 • Scopa: tocca chi ha preso carte, denari, settebello e primiera, aggiungi le scope. Fatto.
+• Briscola: scrivi i punti di una squadra, l'altra si calcola da sola (120 in tutto). Mani vinte e punti, 60 a 60 è pari; secca, 2 su 3 o 3 su 5, in due, in tre o a coppie.
 • Burraco: inserisci burraco puliti e sporchi, carte in tavola e in mano, chiusura e pozzetto: la somma la fa l'app. Si gioca a 505, 1005 o 2005.
 • Scala 40: penalità, eliminazione a 101 (o 151, 201), rientro e raddoppio se li usate.
 • Libero: per qualsiasi altro gioco, con o senza obiettivo, anche "vince chi ha meno punti".
@@ -43,7 +44,7 @@ Con un unico acquisto sblocchi:
 
 Tema chiaro e scuro. In 14 lingue.
 
-NOTE DI RILASCIO (versione 1.1.0, prima pubblicazione)
+NOTE DI RILASCIO (versione 1.2.0, prima pubblicazione)
 Prima versione di Simple Score.
 
 
@@ -63,7 +64,8 @@ Every player on screen with big numbers, their position and who deals next: the 
 
 READY-MADE GAMES
 • Free play: any game, with or without a target, including "lowest score wins".
-• Scopa, Burraco and Scala 40: the classic Italian card games, with guided scoring.
+• Scopa, Briscola, Burraco and Scala 40: the classic Italian card games, with guided scoring.
+• Briscola: enter one side's points and the other fills itself in (120 in total). Rounds won and points, best of 3 or 5.
 
 MADE A MISTAKE? FIX IT
 Tap any round in the table and change it: all totals update. You can also remove the last round.
@@ -86,5 +88,5 @@ One purchase unlocks:
 
 Light and dark theme. In 14 languages.
 
-RELEASE NOTES (version 1.1.0, first release)
+RELEASE NOTES (version 1.2.0, first release)
 First release of Simple Score.
