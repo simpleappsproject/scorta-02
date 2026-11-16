@@ -82,7 +82,7 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .btn.primary{background:var(--accent);color:var(--on-accent)}
 .btn:disabled{opacity:.55;cursor:default}
 .btn svg{width:20px;height:20px;vertical-align:-4px;margin-inline-end:6px}
-.link{color:var(--accent);font-weight:600;padding:6px 0}
+.link{color:var(--accent);font-weight:600;padding:6px 0;min-height:44px}
 .link.danger{color:var(--muted)}
 .link.danger.armed{color:var(--bad)}
 .lock{display:inline-block;width:12px;height:12px;margin-inline-start:5px;vertical-align:-1px;opacity:.7}
@@ -124,6 +124,12 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .chip{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;position:relative;border:2px solid transparent}
 .chip i{width:26px;height:26px;border-radius:50%;display:block;background:var(--c)}
 .chip[aria-pressed="true"]{border-color:var(--fg)}
+/* Area di tocco più grande (almeno ~44 px) senza cambiare l'aspetto */
+.seg button,.dealer{position:relative}
+.seg button::after{content:"";position:absolute;inset:-4px 0}
+.dealer::after{content:"";position:absolute;inset:-12px -4px}
+.chip::after{content:"";position:absolute;inset:-6px;border-radius:50%}
+.sel{min-height:40px}
 .chip .lock{position:absolute;inset-inline-end:-4px;bottom:-4px;margin:0;background:var(--surface);border-radius:50%;padding:1px;width:16px;height:16px;opacity:1;color:var(--muted)}
 .pro-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;width:100%}
 .pro-row b{display:block}

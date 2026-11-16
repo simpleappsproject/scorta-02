@@ -1,5 +1,5 @@
 (function(){
-const VERSION = '1.2.2';
+const VERSION = '1.2.3';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -374,7 +374,7 @@ function renderSetup(){
   // Opzioni
   const tLabel = v => !v ? esc(t('su.noTarget')) : draft.type!=='briscola' ? num(v) : esc(briLabel(v));
   const tg = G.targets.map(v=>`<button data-target="${v}" aria-pressed="${draft.target===v}">${tLabel(v)}</button>`).join('');
-  let o = `<div class="opt-row" style="flex-direction:column;align-items:stretch"><div><b>${esc(t('su.target.'+draft.type))}</b><small>${esc(t('su.target.'+draft.type+'.h'))}</small></div><div class="seg" role="group">${tg}</div></div>`;
+  let o = `<div class="opt-row" style="flex-direction:column;align-items:stretch"><div><b>${esc(t('su.target.'+draft.type))}</b><small>${esc(t('su.target.'+draft.type+'.h'))}</small></div><div class="seg" role="group" aria-label="${esc(t('su.target.'+draft.type))}">${tg}</div></div>`;
   if(draft.type==='briscola') o += `<p class="hint" style="text-align:start;margin:10px 0 2px">${esc(t('bri.setup'))}</p>`;
   if(draft.type==='free') o += switchRow('low', t('su.low'), t('su.low.h'));
   if(draft.type==='scala40'){ o += switchRow('reentry', t('su.reentry'), t('su.reentry.h')) + switchRow('dbl', t('su.dbl'), t('su.dbl.h')); }
@@ -449,7 +449,7 @@ function renderBoard(){
       <div class="tn"><span>${esc(p.name)}</span></div>
       <div class="tt">${num(st.tot[i])}</div>
       ${st.pts?`<div class="tp">${esc(t('bri.pts',{p:num(st.pts[i])}))}</div>`:''}
-      <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}">${cardsSVG}${esc(t('b.dealer'))}</button>`:''}</div>
+      <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}" aria-label="${esc(t('b.dealer'))}: ${esc(p.name)}">${cardsSVG}${esc(t('b.dealer'))}</button>`:''}</div>
       ${g.target?`<div class="bar"><i style="--w:${pct}%"></i></div>`:''}
     </div>`;
   }).join('');
@@ -507,14 +507,16 @@ function openHand(k){
   renderHand(); $('#hand').hidden=false;
   const f=$('#handBody input'); if(f && g.type!=='burraco') setTimeout(()=>{ try{ f.focus(); }catch(e){} },60);
 }
-const numIn = (key,i,val,opts) => `<span class="num">${opts&&opts.sign?`<button class="sign" data-sign="${i}" aria-pressed="${!!(hd.neg&&hd.neg[i])}" aria-label="${esc(t('hand.minus'))}">−</button>`:''}<input inputmode="numeric" pattern="[0-9]*" data-in="${key}" data-i="${i}" value="${esc(val===''||val==null?'':Math.abs(val))}" placeholder="0" ${opts&&opts.disabled?'disabled':''} aria-label="${esc(opts&&opts.label||'')}"></span>`;
-const stepper = (key,i,val,label) => `<span class="stepper"><button data-step="${key}" data-i="${i}" data-d="-1" aria-label="${esc(t('hand.less',{x:label}))}">−</button><output>${val}</output><button data-step="${key}" data-i="${i}" data-d="1" aria-label="${esc(t('hand.more',{x:label}))}">+</button></span>`;
-const pickSeg = (key, val, allowNone, noneLabel) => `<div class="seg" role="group">${current.players.map((p,i)=>`<button data-pick="${key}" data-v="${i}" aria-pressed="${val===i}">${esc(p.name)}</button>`).join('')}${allowNone?`<button data-pick="${key}" data-v="-1" aria-pressed="${val===-1}">${esc(noneLabel||t('hand.none'))}</button>`:''}</div>`;
+/* Nome per TalkBack: "Burraco puliti – Noi" (con 2 squadre la stessa voce compare per ognuna) */
+const who = (label,i) => { const n=current&&current.players[i]&&current.players[i].name; return !label ? (n||'') : (n&&n!==label ? label+' – '+n : label); };
+const numIn = (key,i,val,opts) => `<span class="num">${opts&&opts.sign?`<button class="sign" data-sign="${i}" aria-pressed="${!!(hd.neg&&hd.neg[i])}" aria-label="${esc(who(t('hand.minus'),i))}">−</button>`:''}<input inputmode="numeric" pattern="[0-9]*" data-in="${key}" data-i="${i}" value="${esc(val===''||val==null?'':Math.abs(val))}" placeholder="0" ${opts&&opts.disabled?'disabled':''} aria-label="${esc(who(opts&&opts.label,i))}"></span>`;
+const stepper = (key,i,val,label) => `<span class="stepper"><button data-step="${key}" data-i="${i}" data-d="-1" aria-label="${esc(who(t('hand.less',{x:label}),i))}">−</button><output>${val}</output><button data-step="${key}" data-i="${i}" data-d="1" aria-label="${esc(who(t('hand.more',{x:label}),i))}">+</button></span>`;
+const pickSeg = (key, val, allowNone, noneLabel, label) => `<div class="seg" role="group"${label?` aria-label="${esc(label)}"`:''}>${current.players.map((p,i)=>`<button data-pick="${key}" data-v="${i}" aria-pressed="${val===i}">${esc(p.name)}</button>`).join('')}${allowNone?`<button data-pick="${key}" data-v="-1" aria-pressed="${val===-1}">${esc(noneLabel||t('hand.none'))}</button>`:''}</div>`;
 function renderHand(){
   const g=current, P=g.players;
   let h='';
   if(g.type==='scopa'){
-    h += ['carte','denari','sette','primiera'].map(k=>`<div class="pickrow"><b>${esc(t('scopa.'+k))}</b>${pickSeg(k, hd[k], k!=='sette')}</div>`).join('');
+    h += ['carte','denari','sette','primiera'].map(k=>`<div class="pickrow"><b>${esc(t('scopa.'+k))}</b>${pickSeg(k, hd[k], k!=='sette', null, t('scopa.'+k))}</div>`).join('');
     h += `<div class="pickrow"><b>${esc(t('scopa.scope'))}</b>${P.map((p,i)=>`<div class="hrow" style="border-top:0;padding:4px 0"><span class="who" style="--c:${p.color}"><i></i><span>${esc(p.name)}</span></span>${stepper('scope',i,hd.scope[i]||0,t('scopa.scope'))}</div>`).join('')}</div>`;
   } else if(g.type==='burraco'){
     h += `<div class="teamcols">${P.map((p,i)=>`<div class="teamcol" style="--c:${p.color}"><h4><i></i><span>${esc(p.name)}</span></h4>
@@ -522,14 +524,14 @@ function renderHand(){
       <div class="field st"><span>${esc(t('bur.sp'))}<small>+100</small></span>${stepper('sp',i,hd.sp[i],t('bur.sp'))}</div>
       <div class="field"><span>${esc(t('bur.tav'))}<small>+</small></span>${numIn('tav',i,hd.tav[i],{label:t('bur.tav')})}</div>
       <div class="field"><span>${esc(t('bur.man'))}<small>−</small></span>${numIn('man',i,hd.man[i],{label:t('bur.man')})}</div>
-      <div class="field"><span>${esc(t('bur.pozz'))}<small>${esc(t('bur.pozz.h'))}</small></span><span class="switch"><input type="checkbox" data-pozz="${i}" ${hd.pozz[i]?'checked':''} aria-label="${esc(t('bur.pozz'))}"><span></span></span></div>
+      <div class="field"><span>${esc(t('bur.pozz'))}<small>${esc(t('bur.pozz.h'))}</small></span><span class="switch"><input type="checkbox" data-pozz="${i}" ${hd.pozz[i]?'checked':''} aria-label="${esc(who(t('bur.pozz'),i))}"><span></span></span></div>
     </div>`).join('')}</div>
-    <div class="pickrow" style="border-top:0;margin-top:8px"><b>${esc(t('bur.close'))} <small style="color:var(--muted);font-weight:500">+100</small></b>${pickSeg('chiusura',hd.chiusura,true,t('hand.nobody'))}</div>
+    <div class="pickrow" style="border-top:0;margin-top:8px"><b>${esc(t('bur.close'))} <small style="color:var(--muted);font-weight:500">+100</small></b>${pickSeg('chiusura',hd.chiusura,true,t('hand.nobody'),t('bur.close'))}</div>
     <p class="hint" style="text-align:start">${esc(t('bur.values'))}</p>`;
   } else if(g.type==='scala40'){
     const out=standings(g,hd._upto).out;
     h += P.map((p,i)=>`<div class="hrow"><span class="who" style="--c:${p.color}"><i></i><span>${esc(p.name)}</span></span>${out[i]?`<small style="color:var(--muted)">${esc(t('b.out'))}</small>`:numIn('v',i,hd.closed===i?'':hd.v[i],{disabled:hd.closed===i, label:p.name})}</div>`).join('');
-    h += `<div class="pickrow"><b>${esc(t('s40.closed'))}</b>${pickSeg('closed',hd.closed,true,t('hand.nobody'))}</div>`;
+    h += `<div class="pickrow"><b>${esc(t('s40.closed'))}</b>${pickSeg('closed',hd.closed,true,t('hand.nobody'),t('s40.closed'))}</div>`;
     if(g.opts.dbl) h += `<div class="opt-row" style="padding:10px 0"><label for="s40dbl"><b>${esc(t('s40.dbl'))}</b><small>${esc(t('s40.dbl.h'))}</small></label><span class="switch"><input type="checkbox" id="s40dbl" data-dbl ${hd.dbl?'checked':''}><span></span></span></div>`;
     h += `<p class="hint" style="text-align:start">${esc(t('s40.values'))}</p>`;
   } else if(g.type==='briscola'){
@@ -713,7 +715,7 @@ $('#diceClose').addEventListener('click',closeDice);
 $('#diceSheet').addEventListener('click',e=>{ if(e.target.id==='diceSheet') closeDice(); });
 
 /* ---------- Impostazioni ---------- */
-const seg = (key, opts, val) => `<div class="seg" role="group">${opts.map(([v,label])=>`<button data-seg="${key}" data-v="${v}" aria-pressed="${v===val}">${esc(label)}</button>`).join('')}</div>`;
+const seg = (key, opts, val, label) => `<div class="seg" role="group"${label?` aria-label="${esc(label)}"`:''}>${opts.map(([v,label])=>`<button data-seg="${key}" data-v="${v}" aria-pressed="${v===val}">${esc(label)}</button>`).join('')}</div>`;
 function renderSettings(){
   const proRow = pro
     ? `<div class="pro-row"><div><b>${esc(t('set.pro.on'))}</b><small>${esc(t('set.pro.on.h'))}</small></div></div>`
@@ -721,9 +723,9 @@ function renderSettings(){
   const acc = pro ? settings.accent : 'green';
   $('#settingsPanel').innerHTML =
     `<div class="toggle"><b>${esc(t('set.lang'))}</b><select class="sel" data-sel="lang" aria-label="${esc(t('set.lang'))}">${['auto'].concat(LANGS).map(l=>`<option value="${l}"${l===(LANGS.includes(settings.lang)?settings.lang:'auto')?' selected':''}${l==='auto'?'':` lang="${l}"`}>${esc(l==='auto'?t('opt.auto'):I18N[l]._.name)}</option>`).join('')}</select></div>`
-    + `<div class="toggle"><b>${esc(t('set.theme'))}</b>${seg('theme',[['auto',t('opt.auto')],['light',t('opt.light')],['dark',t('opt.dark')]],settings.theme)}</div>`
+    + `<div class="toggle"><b>${esc(t('set.theme'))}</b>${seg('theme',[['auto',t('opt.auto')],['light',t('opt.light')],['dark',t('opt.dark')]],settings.theme,t('set.theme'))}</div>`
     + `<div class="toggle"><label for="set-awake"><b>${esc(t('set.awake'))}</b><small>${esc(t('set.awake.h'))}</small></label><span class="switch"><input type="checkbox" id="set-awake" data-set="awake" ${settings.awake?'checked':''}><span></span></span></div>`
-    + `<div class="toggle col"><b>${esc(t('set.accent'))}</b><div class="chips" role="group">${Object.entries(ACCENTS).map(([k,c])=>
+    + `<div class="toggle col"><b>${esc(t('set.accent'))}</b><div class="chips" role="group" aria-label="${esc(t('set.accent'))}">${Object.entries(ACCENTS).map(([k,c])=>
         `<button class="chip" data-accent="${k}" aria-pressed="${k===acc}" aria-label="${esc(t('accent.'+k))}${!pro&&k!=='green'?' – '+esc(t('set.locked')):''}" style="--c:${isDark()?c[1]:c[0]}"><i></i>${!pro&&k!=='green'?lockSVG:''}</button>`).join('')}</div></div>`
     + `<div class="toggle" style="padding:0">${proRow}</div>`;
   const pb=$('#setPro'); if(pb) pb.addEventListener('click',()=>openPro());
