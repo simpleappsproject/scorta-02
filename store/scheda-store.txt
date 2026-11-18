@@ -1,6 +1,6 @@
 SIMPLE SCORE – TESTI PER LA SCHEDA DEL PLAY STORE (BOZZA)
 (copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store)
-Da decidere con Francesco: nome italiano sullo store e prezzo di Pro (proposta 1,99 €).
+Da decidere con Francesco: nome italiano sullo store. Prezzo di Pro deciso il 18/11/2026: 1 €, acquisto unico (vedi in fondo).
 
 ==================== ITALIANO (it-IT) ====================
 
@@ -100,3 +100,11 @@ Si rifanno con:  npm run serve  (in un'altra finestra)  poi  node tools/screensh
 4. Scopa in pochi tocchi. / Scopa in a few taps.
 5. Chi vince, anche a notte fonda. (tema scuro) / Who won, even late at night.
 6. Storico e statistiche. / History and statistics.
+
+==================== ALTRI DATI ====================
+Prodotto in-app: ID  score_pro  — Nome "Simple Score Pro" — Prezzo 1 € (acquisto unico, non abbonamento; uguale per tutte le app Simple Apps)
+  In Play Console: Monetizza con Play → Prodotti → prodotti a pagamento singolo (prima "Prodotti in-app") → Crea. Prezzo predefinito 1,00 EUR; per gli altri paesi
+  va bene la conversione automatica di Google. Nell'app il prezzo non è scritto a mano: si legge da Google Play.
+Informativa privacy: https://simpleapps-it.netlify.app/sito/privacy/score.html
+Sito web: https://simpleapps-it.netlify.app/
+Email di contatto: simpleappsproject@gmail.com
