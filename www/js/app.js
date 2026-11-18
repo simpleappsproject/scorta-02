@@ -1,5 +1,5 @@
 (function(){
-const VERSION = '1.2.4';
+const VERSION = '1.2.5';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -646,6 +646,8 @@ function openEnd(g, fromHistory){
   $('#eRank').innerHTML = rk.map(i=>`<li style="--c:${g.players[i].color}"><span class="p">${pos[i]}</span><i></i><span class="nm">${esc(g.players[i].name)}${st.out[i]?' · '+esc(t('b.out')):''}${st.pts?`<small> · ${esc(t('bri.pts',{p:num(st.pts[i])}))}</small>`:''}</span><b>${num(st.tot[i])}</b></li>`).join('');
   $('#eChart').innerHTML = chartSVG(g, st);
   $('#eAgain').textContent = t(fromHistory?'end.playAgain':'end.again');
+  $('#eDelWrap').hidden = !fromHistory;   // si toglie dallo storico solo aprendo una partita vecchia (subito dopo la fine c'è già "Annulla")
+  disarm($('#eDel'));
   show('end');
 }
 function chartSVG(g, st){
@@ -667,6 +669,13 @@ $('#eAgain').addEventListener('click',()=>{
   if(GAMES[g.type].pro && !pro){ openPro('game'); return; }
   openSetup(g.type, g);
 });
+
+/* Togliere una partita dallo storico: doppio tocco ("Tocca di nuovo") e poi "Annulla" per qualche secondo */
+$('#eDel').addEventListener('click',e=>arm(e.currentTarget,t('b.undoConfirm'),()=>{
+  const g=endGame, k=games.indexOf(g); if(k<0) return;
+  games.splice(k,1); saveGames(); show('history');
+  toast(t('toast.gameDeleted'),()=>{ if(games.some(x=>x.id===g.id)) return; const w=x=>x.ended||x.started||''; let j=games.findIndex(x=>w(x)<w(g)); if(j<0) j=games.length; games.splice(j,0,g); saveGames(); if(view==='history') renderHistory(); });
+}));
 
 /* ---------- Storico ---------- */
 function renderHistory(){

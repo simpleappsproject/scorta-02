@@ -1,6 +1,6 @@
 /* Solo per la versione web di Simple Score: rende l'app disponibile offline. Nell'app Android non viene usato.
    Quando aggiorni i file della versione web, aumenta il numero di versione qui sotto. */
-const CACHE = 'simple-score-v7';
+const CACHE = 'simple-score-v8';
 const FILES = [
   './', 'index.html', 'privacy.html', 'manifest.webmanifest',
   'js/i18n.js', 'js/native.js', 'js/app.js',

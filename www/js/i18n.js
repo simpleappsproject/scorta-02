@@ -52,7 +52,7 @@ window.I18N = {
     's40.values': 'Carte rimaste: jolly 25, asso 11, figure 10, le altre il loro valore.',
 
     'end.tie': 'Pareggio', 'end.wins': 'Vince in {n} mani', 'end.wins.one': 'Vince in 1 mano', 'end.chart': 'Andamento della partita',
-    'end.close': 'Chiudi', 'end.again': 'Rivincita', 'end.playAgain': 'Gioca ancora',
+    'end.close': 'Chiudi', 'end.again': 'Rivincita', 'end.playAgain': 'Gioca ancora', 'end.delete': 'Elimina dallo storico', 'toast.gameDeleted': 'Partita eliminata',
 
     'h.empty': 'Le partite finite compaiono qui.', 'h.won': 'vince',
     'h.older': 'Altre {n} partite più vecchie', 'h.older.one': 'Un’altra partita più vecchia', 'h.olderBtn': 'Storico completo con Pro',
@@ -173,7 +173,7 @@ window.I18N = {
     's40.values': 'Cards left: joker 25, ace 11, face cards 10, others their value.',
 
     'end.tie': 'Tie', 'end.wins': 'Wins in {n} rounds', 'end.wins.one': 'Wins in 1 round', 'end.chart': 'How the game went',
-    'end.close': 'Close', 'end.again': 'Rematch', 'end.playAgain': 'Play again',
+    'end.close': 'Close', 'end.again': 'Rematch', 'end.playAgain': 'Play again', 'end.delete': 'Delete from history', 'toast.gameDeleted': 'Game deleted',
 
     'h.empty': 'Finished games appear here.', 'h.won': 'won',
     'h.older': '{n} older games', 'h.older.one': '1 older game', 'h.olderBtn': 'Full history with Pro',
@@ -294,7 +294,7 @@ window.I18N = {
     's40.values': "Cartas que quedan: comodín 25, as 11, figuras 10, las demás su valor.",
 
     'end.tie': "Empate", 'end.wins': "Gana en {n} rondas", 'end.wins.one': "Gana en 1 ronda", 'end.chart': "Cómo fue la partida",
-    'end.close': "Cerrar", 'end.again': "Revancha", 'end.playAgain': "Jugar otra vez",
+    'end.close': "Cerrar", 'end.again': "Revancha", 'end.playAgain': "Jugar otra vez", 'end.delete': "Eliminar del historial", 'toast.gameDeleted': "Partida eliminada",
 
     'h.empty': "Aquí aparecen las partidas terminadas.", 'h.won': "ganó",
     'h.older': "{n} partidas más antiguas", 'h.older.one': "1 partida más antigua", 'h.olderBtn': "Historial completo con Pro",
@@ -415,7 +415,7 @@ window.I18N = {
     's40.values': "Cartes restantes : joker 25, as 11, figures 10, les autres leur valeur.",
 
     'end.tie': "Égalité", 'end.wins': "Gagne en {n} manches", 'end.wins.one': "Gagne en {n} manche", 'end.chart': "Déroulé de la partie",
-    'end.close': "Fermer", 'end.again': "Revanche", 'end.playAgain': "Rejouer",
+    'end.close': "Fermer", 'end.again': "Revanche", 'end.playAgain': "Rejouer", 'end.delete': "Supprimer de l’historique", 'toast.gameDeleted': "Partie supprimée",
 
     'h.empty': "Les parties terminées apparaissent ici.", 'h.won': "a gagné",
     'h.older': "{n} parties plus anciennes", 'h.older.one': "{n} partie plus ancienne", 'h.olderBtn': "Historique complet avec Pro",
@@ -537,7 +537,7 @@ window.I18N = {
     's40.values': "Restkarten: Joker 25, Ass 11, Bildkarten 10, die anderen ihren Wert.",
 
     'end.tie': "Unentschieden", 'end.wins': "Gewinnt in {n} Runden", 'end.wins.one': "Gewinnt in 1 Runde", 'end.chart': "Spielverlauf",
-    'end.close': "Schließen", 'end.again': "Revanche", 'end.playAgain': "Nochmal spielen",
+    'end.close': "Schließen", 'end.again': "Revanche", 'end.playAgain': "Nochmal spielen", 'end.delete': "Aus dem Verlauf löschen", 'toast.gameDeleted': "Spiel gelöscht",
 
     'h.empty': "Beendete Spiele erscheinen hier.", 'h.won': "gewinnt",
     'h.older': "{n} ältere Spiele", 'h.older.one': "1 älteres Spiel", 'h.olderBtn': "Ganzer Verlauf mit Pro",
@@ -658,7 +658,7 @@ window.I18N = {
     's40.values': "Cartas que sobraram: curinga 25, ás 11, figuras 10, as outras o seu valor.",
 
     'end.tie': "Empate", 'end.wins': "Vence em {n} rodadas", 'end.wins.one': "Vence em {n} rodada", 'end.chart': "Como foi a partida",
-    'end.close': "Fechar", 'end.again': "Revanche", 'end.playAgain': "Jogar de novo",
+    'end.close': "Fechar", 'end.again': "Revanche", 'end.playAgain': "Jogar de novo", 'end.delete': "Apagar do histórico", 'toast.gameDeleted': "Partida apagada",
 
     'h.empty': "As partidas terminadas aparecem aqui.", 'h.won': "venceu",
     'h.older': "Mais {n} partidas antigas", 'h.older.one': "Mais {n} partida antiga", 'h.olderBtn': "Histórico completo com Pro",
@@ -837,7 +837,7 @@ window.I18N = {
     'end.wins': "Menang dalam {n} ronde",
     'end.wins.one': "Menang dalam {n} ronde",
     'end.chart': "Jalannya permainan",
-    'end.close': "Tutup",
+    'end.close': "Tutup", 'end.delete': "Hapus dari riwayat", 'toast.gameDeleted': "Permainan dihapus",
     'end.again': "Tanding ulang",
     'end.playAgain': "Main lagi",
     'h.empty': "Permainan yang selesai muncul di sini.",
@@ -1045,7 +1045,7 @@ window.I18N = {
     'end.wins': "{n} elde kazandı",
     'end.wins.one': "{n} elde kazandı",
     'end.chart': "Oyunun gidişatı",
-    'end.close': "Kapat",
+    'end.close': "Kapat", 'end.delete': "Geçmişten sil", 'toast.gameDeleted': "Oyun silindi",
     'end.again': "Rövanş",
     'end.playAgain': "Tekrar oyna",
     'h.empty': "Biten oyunlar burada görünür.",
@@ -1257,7 +1257,7 @@ window.I18N = {
     'end.wins.few': "Победа за {n} раунда",
     'end.wins.many': "Победа за {n} раундов",
     'end.chart': "Ход игры",
-    'end.close': "Закрыть",
+    'end.close': "Закрыть", 'end.delete': "Удалить из истории", 'toast.gameDeleted': "Игра удалена",
     'end.again': "Реванш",
     'end.playAgain': "Играть ещё",
     'h.empty': "Здесь появятся завершённые игры.",
@@ -1468,7 +1468,7 @@ window.I18N = {
     'end.wins': "{n} राउंड में जीत",
     'end.wins.one': "{n} राउंड में जीत",
     'end.chart': "खेल कैसे चला",
-    'end.close': "बंद करें",
+    'end.close': "बंद करें", 'end.delete': "इतिहास से हटाएँ", 'toast.gameDeleted': "खेल हटाया गया",
     'end.again': "फिर से मुक़ाबला",
     'end.playAgain': "फिर खेलें",
     'h.empty': "ख़त्म हुए खेल यहाँ दिखेंगे।",
@@ -1618,7 +1618,7 @@ window.I18N = {
     's40.values': "剩余手牌：百搭 25，A 为 11，人头牌 10，其余按牌面计。",
 
     'end.tie': "平局", 'end.wins': "用 {n} 轮获胜", 'end.wins.one': "用 1 轮获胜", 'end.chart': "对局走势",
-    'end.close': "关闭", 'end.again': "再战一局", 'end.playAgain': "再玩一次",
+    'end.close': "关闭", 'end.again': "再战一局", 'end.playAgain': "再玩一次", 'end.delete': "从历史记录中删除", 'toast.gameDeleted': "已删除对局",
 
     'h.empty': "已结束的对局会显示在这里。", 'h.won': "获胜",
     'h.older': "另有 {n} 局更早的对局", 'h.older.one': "另有 1 局更早的对局", 'h.olderBtn': "Pro 版可查看完整历史",
@@ -1737,7 +1737,7 @@ window.I18N = {
     's40.values': "残りの札：ジョーカー25、Aは11、絵札は10、その他は数字どおり。",
 
     'end.tie': "引き分け", 'end.wins': "{n}ラウンドで勝利", 'end.wins.one': "1ラウンドで勝利", 'end.chart': "ゲームの流れ",
-    'end.close': "閉じる", 'end.again': "再戦", 'end.playAgain': "もう一度遊ぶ",
+    'end.close': "閉じる", 'end.again': "再戦", 'end.playAgain': "もう一度遊ぶ", 'end.delete': "履歴から削除", 'toast.gameDeleted': "ゲームを削除しました",
 
     'h.empty': "終わったゲームはここに表示されます。", 'h.won': "勝ち",
     'h.older': "以前のゲーム あと{n}件", 'h.older.one': "以前のゲーム あと1件", 'h.olderBtn': "Proで全履歴を表示",
@@ -1856,7 +1856,7 @@ window.I18N = {
     's40.values': "남은 카드: 조커 25, A는 11, 그림 카드 10, 나머지는 숫자대로.",
 
     'end.tie': "무승부", 'end.wins': "{n}라운드 만에 승리", 'end.wins.one': "1라운드 만에 승리", 'end.chart': "게임 흐름",
-    'end.close': "닫기", 'end.again': "재대결", 'end.playAgain': "다시 하기",
+    'end.close': "닫기", 'end.again': "재대결", 'end.playAgain': "다시 하기", 'end.delete': "기록에서 삭제", 'toast.gameDeleted': "게임을 삭제했어요",
 
     'h.empty': "끝난 게임이 여기에 표시돼요.", 'h.won': "승리",
     'h.older': "이전 게임 {n}개 더", 'h.older.one': "이전 게임 1개 더", 'h.olderBtn': "Pro로 전체 기록 보기",
@@ -1975,7 +1975,7 @@ window.I18N = {
     's40.values': "الأوراق المتبقية: الجوكر 25، الآس 11، الصور 10، والباقي بقيمته.",
 
     'end.tie': "تعادل", 'end.wins': "فاز في {n} جولة", 'end.wins.one': "فاز في جولة واحدة", 'end.wins.two': "فاز في جولتين", 'end.wins.few': "فاز في {n} جولات", 'end.wins.many': "فاز في {n} جولة", 'end.chart': "مجرى اللعبة",
-    'end.close': "إغلاق", 'end.again': "إعادة المواجهة", 'end.playAgain': "العب مرة أخرى",
+    'end.close': "إغلاق", 'end.again': "إعادة المواجهة", 'end.playAgain': "العب مرة أخرى", 'end.delete': "احذف من السجل", 'toast.gameDeleted': "تم حذف اللعبة",
 
     'h.empty': "تظهر الألعاب المنتهية هنا.", 'h.won': "فاز",
     'h.older': "{n} لعبة أقدم", 'h.older.one': "لعبة واحدة أقدم", 'h.older.two': "لعبتان أقدم", 'h.older.few': "{n} ألعاب أقدم", 'h.older.many': "{n} لعبة أقدم", 'h.olderBtn': "السجل الكامل مع Pro",
