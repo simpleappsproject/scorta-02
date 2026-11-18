@@ -119,7 +119,9 @@
         if(tx && (tx.purchaseState==null || String(tx.purchaseState)==='1')){ this._setPro && this._setPro(true); return 'ok'; }
         return 'pending';
       }catch(e){
-        const msg = String((e && (e.message||e.code)) || e).toLowerCase();
+        /* il plugin rifiuta con testo generico ("Purchase is not purchased") e il motivo nel codice (USER_CANCELED, ITEM_ALREADY_OWNED): si leggono entrambi */
+        const msg = (String((e && e.message) || e) + ' ' + String((e && e.code) || '')).toLowerCase();
+        if(msg.includes('pending')) return 'pending';
         if(msg.includes('cancel')) return 'cancelled';
         if(msg.includes('already') || msg.includes('owned')){ const h = await this.refresh(); return h ? 'ok' : 'error'; }
         return 'error';
