@@ -96,10 +96,10 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .resume b{display:block;font-size:1.1rem}
 .resume small{display:block;opacity:.85;font-size:.88rem}
 .resume .go{margin-inline-start:auto;font-family:var(--font-display);font-weight:800;font-size:1.3rem;text-transform:uppercase;flex:none}
-.games{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .game{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;min-height:118px}
 .game svg.gi{width:30px;height:30px;color:var(--accent)}
-.game b{font-family:var(--font-display);font-weight:800;font-size:1.45rem;text-transform:uppercase;line-height:1;margin-top:4px}
+.game b{font-family:var(--font-display);font-weight:800;font-size:1.45rem;text-transform:uppercase;line-height:1;margin-top:4px;max-width:100%;overflow-wrap:anywhere;hyphens:auto}
 .game small{color:var(--muted);font-size:.82rem;line-height:1.25}
 .game .lock{position:absolute;top:12px;inset-inline-end:12px;width:16px;height:16px;color:var(--muted)}
 
@@ -297,6 +297,8 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .stats th,.stats td{padding:10px 14px;text-align:end;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
 .stats th{border-top:0;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .stats td:first-child,.stats th:first-child{text-align:start}
+.stats td:first-child{overflow-wrap:anywhere}
+@media (max-width:379px){.stats th,.stats td{padding:10px 8px}.stats th{letter-spacing:.03em}}   /* telefoni stretti: in spagnolo/tedesco le intestazioni uscivano dallo schermo */
 
 /* Barra schede */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);padding-bottom:var(--sab);padding-left:max(8px,var(--sal));padding-right:max(8px,var(--sar))}
