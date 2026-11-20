@@ -101,6 +101,14 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('#toastUndo');
   eq('"Annulla" riporta la partita sul tabellone', await p.evaluate(() => [!!window.__score.current, window.__score.games.length]), [true, 0]);
   await p.screenshot({path: path.join(OUT, 'tabellone.png')});
+  console.log('\nMano senza dettaglio (file di backup modificato a mano o dati vecchi)');
+  await p.evaluate(() => { localStorage.setItem('sc.current', JSON.stringify({id: 'gb', type: 'burraco', players: [{name: 'Noi', color: '#17804f'}, {name: 'Loro', color: '#2457c5'}], hands: [{v: [540, -35]}], target: 2005, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'})); });
+  await p.reload(); await p.waitForFunction(() => window.__score);
+  if (await p.isVisible('#resume')) await p.click('#resume');
+  await p.click('#hands [data-hand="0"]');
+  eq('Burraco: si apre con i punti salvati in tavola/in mano, stesso totale salvando', await p.evaluate(() => [...document.querySelectorAll('#handBody input[data-in]')].map(i => i.dataset.in + '=' + i.value)), ['tav=540', 'man=', 'tav=', 'man=35']);
+  await p.click('#handSave');
+  eq('Burraco: totale invariato dopo il salvataggio', await p.evaluate(() => window.__score.current.hands[0].v), [540, -35]);
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

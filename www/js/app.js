@@ -494,7 +494,16 @@ let hd=null, hk=null;   // dettaglio in modifica, indice della mano (null = nuov
 function openHand(k){
   const g=current; hk=k;
   const n=g.players.length;
-  if(k!=null) hd=JSON.parse(JSON.stringify(g.hands[k].d||{v:g.hands[k].v}));
+  if(k!=null){
+    hd=JSON.parse(JSON.stringify(g.hands[k].d||{v:g.hands[k].v}));
+    /* mano senza dettaglio (file di backup modificato o dati di esempio): si riparte dai punti salvati, senza bloccare l'app */
+    const vv=(g.hands[k].v||[]).map(x=>+x||0), arr=a=>Array.isArray(a)&&a.length===n;
+    if(g.type==='burraco' && !['cl','sp','tav','man','pozz'].every(x=>arr(hd[x])))
+      hd={cl:[0,0], sp:[0,0], tav:vv.map(x=>x>0?x:''), man:vv.map(x=>x<0?-x:''), chiusura:-1, pozz:[true,true]};
+    else if(g.type==='scopa' && !arr(hd.scope))
+      hd={carte:-1, denari:-1, sette:-1, primiera:-1, scope:vv.map(x=>Math.max(0,x))};
+    else if(!arr(hd.v)) hd.v=Array.from({length:n},(x,i)=>vv[i]!=null?String(vv[i]):'');
+  }
   else if(g.type==='scopa') hd={carte:-1, denari:-1, sette:-1, primiera:-1, scope:Array(n).fill(0)};
   else if(g.type==='burraco') hd={cl:[0,0], sp:[0,0], tav:['',''], man:['',''], chiusura:-1, pozz:[true,true]};
   else if(g.type==='scala40') hd={v:Array(n).fill(''), closed:-1, dbl:false};
