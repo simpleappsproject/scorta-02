@@ -95,6 +95,9 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .resume{display:flex;align-items:center;gap:14px;width:100%;text-align:start;background:var(--accent);color:var(--on-accent);border-radius:16px;padding:16px;margin-bottom:8px}
 .resume b{display:block;font-size:1.1rem}
 .resume small{display:block;opacity:.85;font-size:.88rem}
+/* nomi lunghissimi senza spazi (es. un indirizzo incollato) vanno a capo invece di allargare la pagina */
+.resume>div,.hg>span:first-child{min-width:0}
+.resume b,.resume small,.hg .h-name,.hg small,.hg .h-win,.win h2{overflow-wrap:anywhere}
 .resume .go{margin-inline-start:auto;font-family:var(--font-display);font-weight:800;font-size:1.3rem;text-transform:uppercase;flex:none}
 .games{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .game{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;min-height:118px}
