@@ -7,7 +7,8 @@
   "scripts": {
     "serve": "python3 -m http.server 8766 --directory www",
     "sync": "cap sync android",
-    "check": "node tools/check-i18n.js"
+    "check": "node tools/check-i18n.js",
+    "test": "node tools/check-i18n.js && node test/prove.js"
   },
   "dependencies": {
     "@capacitor-community/keep-awake": "^8.0.1",
