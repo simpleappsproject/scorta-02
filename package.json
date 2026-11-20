@@ -1,6 +1,6 @@
 {
   "name": "simple-score",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "private": true,
   "description": "Simple Score: segnapunti per Burraco, Scala 40, Scopa, Briscola e qualsiasi gioco. Offline, senza pubblicità.",
   "license": "UNLICENSED",

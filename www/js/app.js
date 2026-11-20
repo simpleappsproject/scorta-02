@@ -1,5 +1,5 @@
 (function(){
-const VERSION = '1.2.7';
+const VERSION = '1.2.8';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
