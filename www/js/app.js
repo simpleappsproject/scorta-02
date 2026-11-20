@@ -1,8 +1,10 @@
 (function(){
-const VERSION = '1.2.6';
+const VERSION = '1.2.7';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+/* Identificativi e colori letti da un file: solo valori come quelli che crea l'app (un file modificato a mano non deve poter inserire codice nella pagina) */
+const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/, SAFE_COLOR = /^#[0-9a-fA-F]{6}$/;
 const N = window.Native;
 
 const store = {
@@ -53,10 +55,10 @@ function validGame(g){
     && g.players.every(p=>p && typeof p.name==='string') && Array.isArray(g.hands) && g.hands.every(h=>h && Array.isArray(h.v)));
 }
 function normGame(g){
-  if(typeof g.id!=='string' || !g.id) g.id=uid();
+  if(typeof g.id!=='string' || !SAFE_ID.test(g.id)) g.id=uid();
   if(!g.opts || typeof g.opts!=='object') g.opts={};
   if(typeof g.target!=='number') g.target=GAMES[g.type].target;
-  g.players.forEach((p,i)=>{ if(typeof p.color!=='string') p.color=COLORS[i%COLORS.length]; });
+  g.players.forEach((p,i)=>{ if(typeof p.color!=='string' || !SAFE_COLOR.test(p.color)) p.color=COLORS[i%COLORS.length]; });
   if(typeof g.started!=='string') g.started=g.ended||new Date().toISOString();
   if(g.winners && !Array.isArray(g.winners)) delete g.winners;
   return g;
@@ -792,14 +794,19 @@ function buildCSV(list, sep){
   });
   return '\uFEFF' + rows.map(r=>r.map(cell).join(sep)).join('\r\n') + '\r\n';   // \uFEFF (BOM) = Excel legge bene gli accenti
 }
+/* Formato del backup: se cambia, alzare BACKUP_VERSION (i backup più nuovi vengono rifiutati con un messaggio) */
+const BACKUP_VERSION = 1;
 function buildBackup(){
-  return {app:'simple-score', version:1, appVersion:VERSION, exported:new Date().toISOString(),
+  return {app:'simple-score', version:BACKUP_VERSION, appVersion:VERSION, exported:new Date().toISOString(),
     games, current, players:recent, settings:{lang:settings.lang, theme:settings.theme, accent:settings.accent, awake:settings.awake}};
 }
-/* Legge un backup e lo controlla. Restituisce i dati puliti, oppure null se il file non va bene. Il Pro non si ripristina da file (dipende dall'acquisto). */
+/* Legge un backup e lo controlla. Restituisce i dati puliti, {newer:true} se viene da una versione più nuova, {other:'Simple Fuel'} se è il backup di un'altra app, oppure null se il file non va bene. Il Pro non si ripristina da file (dipende dall'acquisto). */
 function parseBackup(text){
   let d=null; try{ d=JSON.parse(String(text).replace(/^\uFEFF/,'')); }catch(e){ return null; }
+  if(d && typeof d==='object' && typeof d.app==='string' && /^simple-[a-z]{2,20}$/.test(d.app) && d.app!=='simple-score')
+    return {other:'Simple '+d.app[7].toUpperCase()+d.app.slice(8)};   // backup di un'altra app Simple Apps: si dice quale
   if(!d || typeof d!=='object' || d.app!=='simple-score' || !Array.isArray(d.games)) return null;
+  if(Number(d.version) > BACKUP_VERSION) return {newer:true};
   const copy = x => JSON.parse(JSON.stringify(x));
   const gs=d.games.filter(validGame).map(g=>normGame(copy(g)));
   if(d.games.length && !gs.length) return null;
@@ -854,6 +861,8 @@ $('#importFile').addEventListener('change',async()=>{
   let b=null;
   if(f.size < 20*1024*1024){ try{ b=parseBackup(await f.text()); }catch(e){ b=null; } }
   if(!b){ toast(t('data.bad')); return; }
+  if(b.newer){ toast(t('data.newer')); return; }
+  if(b.other){ toast(t('data.other',{app:b.other})); return; }
   const when = b.exported ? fmtWhen(b.exported) : '?';
   let text = t('data.confirm.text',{date:when, n:b.games.length});
   if(b.current) text += ' ' + t('data.confirm.current');

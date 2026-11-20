@@ -6,6 +6,8 @@
 window.I18N = {
   it: {
     _: {name:'Italiano', locale:'it-IT', dir:'ltr'},
+    'data.other': "Questo è un backup di {app}: aprilo con {app}",
+    'data.newer': "Questo backup viene da una versione più nuova di Simple Score: aggiorna l’app e riprova",
     'sub.home': 'Segnapunti', 'sub.setup': 'Nuova partita', 'sub.board': 'Partita', 'sub.end': 'Risultato', 'sub.history': 'Partite giocate', 'sub.settings': 'Impostazioni',
     'tab.home': 'Partita', 'tab.history': 'Storico', 'tab.settings': 'Impostazioni', 'tab.aria': 'Sezioni',
 
@@ -127,6 +129,8 @@ window.I18N = {
   },
   en: {
     _: {name:'English', locale:'en-GB', dir:'ltr'},
+    'data.other': "This is a {app} backup: open it in {app}",
+    'data.newer': "This backup comes from a newer version of Simple Score: update the app and try again",
     'sub.home': 'Score keeper', 'sub.setup': 'New game', 'sub.board': 'Game', 'sub.end': 'Result', 'sub.history': 'Games played', 'sub.settings': 'Settings',
     'tab.home': 'Game', 'tab.history': 'History', 'tab.settings': 'Settings', 'tab.aria': 'Sections',
 
@@ -248,6 +252,8 @@ window.I18N = {
   },
   es: {
     '_': {"name":"Español","locale":"es-ES","dir":"ltr"},
+    'data.other': "Este archivo es una copia de {app}: ábrelo con {app}",
+    'data.newer': "Esta copia viene de una versión más nueva de Simple Score: actualiza la app y vuelve a intentarlo",
     'sub.home': "Marcador", 'sub.setup': "Nueva partida", 'sub.board': "Partida", 'sub.end': "Resultado", 'sub.history': "Partidas jugadas", 'sub.settings': "Ajustes",
     'tab.home': "Partida", 'tab.history': "Historial", 'tab.settings': "Ajustes", 'tab.aria': "Secciones",
 
@@ -369,6 +375,8 @@ window.I18N = {
   },
   fr: {
     '_': {"name":"Français","locale":"fr-FR","dir":"ltr"},
+    'data.other': "Ce fichier est une sauvegarde de {app} : ouvrez-le avec {app}",
+    'data.newer': "Cette sauvegarde vient d’une version plus récente de Simple Score : mettez l’app à jour et réessayez",
     'sub.home': "Compteur de points", 'sub.setup': "Nouvelle partie", 'sub.board': "Partie", 'sub.end': "Résultat", 'sub.history': "Parties jouées", 'sub.settings': "Réglages",
     'tab.home': "Partie", 'tab.history': "Historique", 'tab.settings': "Réglages", 'tab.aria': "Sections",
 
@@ -491,6 +499,8 @@ window.I18N = {
   },
   de: {
     '_': {"name":"Deutsch","locale":"de-DE","dir":"ltr"},
+    'data.other': "Das ist ein Backup von {app}: Öffne es in {app}",
+    'data.newer': "Dieses Backup stammt aus einer neueren Version von Simple Score: Aktualisiere die App und versuche es erneut",
     'sub.home': "Punktezähler", 'sub.setup': "Neues Spiel", 'sub.board': "Spiel", 'sub.end': "Ergebnis", 'sub.history': "Gespielte Partien", 'sub.settings': "Einstellungen",
     'tab.home': "Spiel", 'tab.history': "Verlauf", 'tab.settings': "Einstellungen", 'tab.aria': "Bereiche",
 
@@ -612,6 +622,8 @@ window.I18N = {
   },
   pt: {
     '_': {"name":"Português","locale":"pt-BR","dir":"ltr"},
+    'data.other': "Este é um backup do {app}: abra-o no {app}",
+    'data.newer': "Este backup vem de uma versão mais nova do Simple Score: atualize o app e tente de novo",
     'sub.home': "Marcador de pontos", 'sub.setup': "Nova partida", 'sub.board': "Partida", 'sub.end': "Resultado", 'sub.history': "Partidas jogadas", 'sub.settings': "Configurações",
     'tab.home': "Partida", 'tab.history': "Histórico", 'tab.settings': "Ajustes", 'tab.aria': "Seções",
 
@@ -733,6 +745,8 @@ window.I18N = {
   },
   id: {
     '_': {"name":"Bahasa Indonesia","locale":"id-ID","dir":"ltr"},
+    'data.other': "Ini cadangan {app}: buka di {app}",
+    'data.newer': "Cadangan ini dari versi Simple Score yang lebih baru: perbarui aplikasi lalu coba lagi",
     'sub.home': "Pencatat skor",
     'sub.setup': "Permainan baru",
     'sub.board': "Permainan",
@@ -941,6 +955,8 @@ window.I18N = {
   },
   tr: {
     '_': {"name":"Türkçe","locale":"tr-TR","dir":"ltr"},
+    'data.other': "Bu bir {app} yedeği: {app} ile açın",
+    'data.newer': "Bu yedek daha yeni bir Simple Score sürümünden: uygulamayı güncelleyip tekrar deneyin",
     'sub.home': "Skor tutucu",
     'sub.setup': "Yeni oyun",
     'sub.board': "Oyun",
@@ -1149,6 +1165,8 @@ window.I18N = {
   },
   ru: {
     '_': {"name":"Русский","locale":"ru-RU","dir":"ltr"},
+    'data.other': "Это резервная копия {app}: откройте её в {app}",
+    'data.newer': "Эта копия сделана в более новой версии Simple Score: обновите приложение и повторите попытку",
     'sub.home': "Подсчёт очков",
     'sub.setup': "Новая игра",
     'sub.board': "Игра",
@@ -1364,6 +1382,8 @@ window.I18N = {
   },
   hi: {
     '_': {"name":"हिन्दी","locale":"hi-IN","dir":"ltr"},
+    'data.other': "यह {app} का बैकअप है: इसे {app} में खोलें",
+    'data.newer': "यह बैकअप Simple Score के नए वर्ज़न का है: ऐप अपडेट करके फिर कोशिश करें",
     'sub.home': "स्कोर कीपर",
     'sub.setup': "नया खेल",
     'sub.board': "खेल",
@@ -1572,6 +1592,8 @@ window.I18N = {
   },
   zh: {
     '_': {"name":"中文（简体）","locale":"zh-CN","dir":"ltr"},
+    'data.other': "这是 {app} 的备份，请在 {app} 中打开",
+    'data.newer': "这个备份来自更新版本的 Simple Score：请更新应用后重试",
     'sub.home': "记分板", 'sub.setup': "新的一局", 'sub.board': "对局", 'sub.end': "结果", 'sub.history': "已玩对局", 'sub.settings': "设置",
     'tab.home': "对局", 'tab.history': "历史", 'tab.settings': "设置", 'tab.aria': "栏目",
 
@@ -1691,6 +1713,8 @@ window.I18N = {
   },
   ja: {
     '_': {"name":"日本語","locale":"ja-JP","dir":"ltr"},
+    'data.other': "これは {app} のバックアップです。{app} で開いてください",
+    'data.newer': "このバックアップは新しいバージョンの Simple Score で作成されています。アプリを更新してもう一度お試しください",
     'sub.home': "スコア記録", 'sub.setup': "新しいゲーム", 'sub.board': "ゲーム", 'sub.end': "結果", 'sub.history': "プレイ履歴", 'sub.settings': "設定",
     'tab.home': "ゲーム", 'tab.history': "履歴", 'tab.settings': "設定", 'tab.aria': "セクション",
 
@@ -1810,6 +1834,8 @@ window.I18N = {
   },
   ko: {
     '_': {"name":"한국어","locale":"ko-KR","dir":"ltr"},
+    'data.other': "{app} 백업 파일이에요. {app}에서 여세요",
+    'data.newer': "최신 버전의 Simple Score에서 만든 백업이에요. 앱을 업데이트한 뒤 다시 시도하세요",
     'sub.home': "점수 기록", 'sub.setup': "새 게임", 'sub.board': "게임", 'sub.end': "결과", 'sub.history': "지난 게임", 'sub.settings': "설정",
     'tab.home': "게임", 'tab.history': "기록", 'tab.settings': "설정", 'tab.aria': "섹션",
 
@@ -1929,6 +1955,8 @@ window.I18N = {
   },
   ar: {
     '_': {"name":"العربية","locale":"ar-u-nu-latn","dir":"rtl"},
+    'data.other': "هذه نسخة احتياطية من {app}: افتحها في {app}",
+    'data.newer': "هذه النسخة من إصدار أحدث من Simple Score: حدّث التطبيق وحاول مجددًا",
     'sub.home': "تسجيل النقاط", 'sub.setup': "لعبة جديدة", 'sub.board': "اللعبة", 'sub.end': "النتيجة", 'sub.history': "الألعاب السابقة", 'sub.settings': "الإعدادات",
     'tab.home': "اللعبة", 'tab.history': "السجل", 'tab.settings': "الإعدادات", 'tab.aria': "الأقسام",
 
