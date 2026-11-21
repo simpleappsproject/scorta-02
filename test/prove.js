@@ -111,6 +111,25 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   eq('Burraco: si apre con i punti salvati in tavola/in mano, stesso totale salvando', await p.evaluate(() => [...document.querySelectorAll('#handBody input[data-in]')].map(i => i.dataset.in + '=' + i.value)), ['tav=540', 'man=', 'tav=', 'man=35']);
   await p.click('#handSave');
   eq('Burraco: totale invariato dopo il salvataggio', await p.evaluate(() => window.__score.current.hands[0].v), [540, -35]);
+  const load = async (cur, games) => {   // nuova situazione: partita in corso e storico scritti direttamente nei dati salvati
+    await p.evaluate(([c, g]) => { localStorage.setItem('sc.current', JSON.stringify(c)); localStorage.setItem('sc.games', JSON.stringify(g || [])); localStorage.setItem('sc.players', '[]'); }, [cur, games]);
+    await p.reload(); await p.waitForFunction(() => window.__score); await p.evaluate(() => document.fonts.ready);
+    if (cur && await p.isVisible('#resume')) await p.click('#resume');
+  };
+  const pl = names => names.map((name, i) => ({name, color: ['#17804f', '#2457c5', '#c8321f', '#c98a00', '#6a44c9', '#c2500f'][i % 6]}));
+
+  console.log('\nTabellone: totali grandi sempre leggibili (1.2.10)');
+  await p.setViewportSize({width: 320, height: 844});
+  await load({id: 'gt', type: 'free', players: pl(['A', 'B', 'C', 'D', 'E', 'F']), hands: [{v: [-12345, 99999, 10500, -2005, 1250, 0]}], target: 0, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'});
+  const cut = () => p.evaluate(() => [...document.querySelectorAll('.tile .tt')].filter(el => { const r = document.createRange(); r.selectNodeContents(el); const b = r.getBoundingClientRect(), t = el.getBoundingClientRect(); return b.left < t.left - 0.5 || b.right > t.right + 0.5; }).map(el => el.textContent));
+  eq('6 giocatori a 320 punti: nessun totale tagliato (-12.345, 99.999, 10.500…)', await cut(), []);
+  eq('6 giocatori: "Mazziere" solo come icona, con il nome per TalkBack', await p.evaluate(() => { const d = document.querySelector('.tile .dealer'), t = d.closest('.tile').getBoundingClientRect(), r = d.getBoundingClientRect(); return [r.right <= t.right && r.left >= t.left, d.querySelector('.dl').getBoundingClientRect().width, d.getAttribute('aria-label')]; }), [true, 0, 'Mazziere: B']);   // dopo una mano tocca al secondo
+  await p.setViewportSize({width: 390, height: 844});
+  await load({id: 'gt', type: 'free', players: pl(['A', 'B']), hands: [{v: [999, -1250]}], target: 0, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'});
+  eq('2 giocatori, numeri normali: dimensione di sempre (13% della larghezza)', await p.evaluate(() => [...document.querySelectorAll('.tile .tt')].map(el => getComputedStyle(el).fontSize)), ['50.7px', '50.7px']);
+  await load({id: 'gt', type: 'free', players: pl(['A', 'B']), hands: [{v: [-99999, 1234567]}], target: 0, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'});
+  eq('2 giocatori, numeri enormi: rimpiccioliti ma interi', await cut(), []);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

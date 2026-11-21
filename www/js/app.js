@@ -431,6 +431,10 @@ $('#suGo').addEventListener('click',()=>{
 });
 
 /* ---------- Tabellone ---------- */
+/* Larghezza di un totale nel carattere dei numeri (Big Shoulders Display 900), in em, misurata segno per segno e arrotondata per eccesso;
+   segni non previsti (cifre arabe…) 0,6. Serve al CSS per rimpicciolire solo i numeri che non ci stanno (--w nella casella). */
+const NUM_W = {'0':.51,'1':.28,'2':.495,'3':.51,'4':.515,'5':.52,'6':.505,'7':.49,'8':.505,'9':.505,'-':.45,'\u2212':.52,'.':.255,',':.255,"'":.21,' ':.225,'\u00a0':.225,'\u202f':.115,'\u066b':.33,'\u066c':.33,'\u200e':0,'\u200f':0,'\u061c':0};
+const numWidth = s => (1.005*[...s].reduce((a,c)=> a + (NUM_W[c] ?? .6), 0)).toFixed(3);
 function renderBoard(){
   const g=current; if(!g){ show('home'); return; }
   const st=standings(g), rk=ranking(g,st), pos=positions(g,st,rk), n=g.players.length, dealer=dealerOf(g), w=winners(g);
@@ -450,9 +454,9 @@ function renderBoard(){
     const pct = Math.max(0,Math.min(100, st.tot[i]/ref*100));
     return `<div class="tile${first?' lead':''}${out?' out':''}" style="--c:${p.color}">
       <div class="tn"><span>${esc(p.name)}</span></div>
-      <div class="tt">${num(st.tot[i])}</div>
+      <div class="tt" style="--w:${numWidth(num(st.tot[i]))}">${num(st.tot[i])}</div>
       ${st.pts?`<div class="tp">${esc(t('bri.pts',{p:num(st.pts[i])}))}</div>`:''}
-      <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}" aria-label="${esc(t('b.dealer'))}: ${esc(p.name)}">${cardsSVG}${esc(t('b.dealer'))}</button>`:''}</div>
+      <div class="tm"><span class="pos">${esc(info)}</span>${i===dealer&&!out?`<button class="dealer" data-dealer="${i}" aria-label="${esc(t('b.dealer'))}: ${esc(p.name)}" title="${esc(t('b.dealer'))}">${cardsSVG}<span class="dl">${esc(t('b.dealer'))}</span></button>`:''}</div>
       ${g.target?`<div class="bar"><i style="--w:${pct}%"></i></div>`:''}
     </div>`;
   }).join('');
