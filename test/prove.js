@@ -150,6 +150,13 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('.tab[data-tab="history"]'); await p.click('[data-game-id="gs"]'); await p.click('#eAgain'); await p.click('#suGo');
   eq('nomi recenti dopo la rivincita: nessuno', await p.evaluate(() => JSON.parse(localStorage.getItem('sc.players'))), []);
 
+  console.log('\nBackup modificato a mano: vincitori e mazziere non validi');
+  const bw = await p.evaluate(() => [[], [7], ['x'], [1, 1, 9, -1, 0.5], 'a'].map((winners, k) => { const r = window.__score.parseBackup(JSON.stringify({app: 'simple-score', version: 1, games: [{id: 'w' + k, type: 'scopa', target: 11, firstDealer: k ? 5 : '1', players: [{name: 'A', color: '#17804f'}, {name: 'B', color: '#2457c5'}], hands: [{v: [11, 3]}], ended: '2026-11-15T11:00:00Z', winners}]})); return [r.games[0].winners || null, r.games[0].firstDealer]; }));
+  eq('vincitori fuori elenco tolti, mazziere non valido = primo giocatore', bw, [[null, 0], [null, 0], [null, 0], [[1], 0], [null, 0]]);
+  await load(null, [Object.assign({}, sco, {winners: [7]})]);
+  await p.click('.tab[data-tab="history"]'); await p.click('[data-game-id="gs"]');
+  eq('la partita si apre dallo Storico', await p.isVisible('#v-end'), true);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

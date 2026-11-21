@@ -61,7 +61,10 @@ function normGame(g){
   if(typeof g.target!=='number') g.target=GAMES[g.type].target;
   g.players.forEach((p,i)=>{ if(typeof p.color!=='string' || !SAFE_COLOR.test(p.color)) p.color=COLORS[i%COLORS.length]; });
   if(typeof g.started!=='string') g.started=g.ended||new Date().toISOString();
-  if(g.winners && !Array.isArray(g.winners)) delete g.winners;
+  /* vincitori e mazziere: solo posizioni di giocatori che esistono (un file modificato a mano non deve bloccare lo Storico) */
+  const okIdx = x => Number.isInteger(x) && x>=0 && x<g.players.length;
+  if('winners' in g){ const w=Array.isArray(g.winners) ? [...new Set(g.winners.filter(okIdx))] : []; if(w.length) g.winners=w; else delete g.winners; }
+  if(!okIdx(g.firstDealer)) g.firstDealer=0;
   return g;
 }
 current = validGame(current) ? normGame(current) : null;
