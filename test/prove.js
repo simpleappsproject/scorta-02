@@ -130,6 +130,10 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await load({id: 'gt', type: 'free', players: pl(['A', 'B']), hands: [{v: [-99999, 1234567]}], target: 0, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'});
   eq('2 giocatori, numeri enormi: rimpiccioliti ma interi', await cut(), []);
 
+  console.log('\nAvviso in basso: centrato anche mentre compare');
+  await p.click('.tile .dealer');
+  eq('all\'inizio dell\'animazione l\'avviso è già centrato', await p.evaluate(() => { const el = document.querySelector('#toast'); el.getAnimations().forEach(a => { a.pause(); a.currentTime = 0; }); const r = el.getBoundingClientRect(); return Math.round(r.left + r.width / 2) === Math.round(innerWidth / 2); }), true);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

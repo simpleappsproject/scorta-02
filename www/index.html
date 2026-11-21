@@ -313,7 +313,8 @@ h2{font-family:var(--font-display);font-weight:800;text-transform:uppercase;lett
 .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 9px;color:var(--muted);font-size:.78rem;font-weight:600}
 .tab svg{width:24px;height:24px}
 .tab[aria-current="page"]{color:var(--accent)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + var(--sab));z-index:40;width:calc(100% - 32px);max-width:560px;background:var(--fg);color:var(--bg);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:.94rem;box-shadow:0 6px 20px rgba(0,0,0,.25);animation:up .2s ease-out}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(78px + var(--sab));z-index:40;width:calc(100% - 32px);max-width:560px;background:var(--fg);color:var(--bg);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:.94rem;box-shadow:0 6px 20px rgba(0,0,0,.25);animation:toastUp .2s ease-out}
+@keyframes toastUp{from{transform:translate(-50%,30px);opacity:0}to{transform:translateX(-50%);opacity:1}}   /* tiene la centratura (translateX) durante la comparsa */
 .toast button{color:var(--bg);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:.82rem;padding:4px 2px;flex:none;opacity:.9}
 @media (prefers-reduced-motion: reduce){.sheet-card,.toast,.die.roll{animation:none}}
 </style>
