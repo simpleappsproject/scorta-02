@@ -625,7 +625,9 @@ $('#handBody').addEventListener('input',e=>{
 });
 $('#handBody').addEventListener('change',e=>{
   if(e.target.dataset.in==='v' && /[.,\u066b]/.test(e.target.value)){ e.target.value=e.target.value.split(/[.,\u066b]/)[0]; e.target._shown=e.target.value; }   // Libera: via i decimali scritti
-  if(e.target.dataset.pozz!=null){ hd.pozz[+e.target.dataset.pozz]=e.target.checked; renderPreview(); }
+  if(e.target.dataset.pozz!=null){ const i=+e.target.dataset.pozz; hd.pozz[i]=e.target.checked;
+    /* chi ha chiuso ha per forza preso il pozzetto: senza pozzetto la chiusura si toglie (mai +100 e −100 insieme) */
+    if(!e.target.checked && hd.chiusura===i){ hd.chiusura=-1; renderHand(); } else renderPreview(); }
   if(e.target.dataset.dbl!=null){ hd.dbl=e.target.checked; renderPreview(); }
 });
 $('#handBody').addEventListener('click',e=>{

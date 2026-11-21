@@ -157,6 +157,16 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('.tab[data-tab="history"]'); await p.click('[data-game-id="gs"]');
   eq('la partita si apre dallo Storico', await p.isVisible('#v-end'), true);
 
+  console.log('\nBurraco: chi ha chiuso ha preso il pozzetto');
+  await load({id: 'gb2', type: 'burraco', players: pl(['Noi', 'Voi']), hands: [], target: 2005, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z'});
+  await p.click('#bAdd'); await p.click('[data-step="cl"][data-i="0"][data-d="1"]');
+  await p.locator('#handBody input[data-in="tav"]').nth(0).fill('100');
+  await p.click('[data-pick="chiusura"][data-v="0"]');
+  await p.locator('[data-pozz="0"]').evaluate(el => el.click());
+  eq('spento il pozzetto di chi ha chiuso: chiusura tolta (200 + 100 − 100)', [await p.getAttribute('[data-pick="chiusura"][data-v="-1"]', 'aria-pressed'), await p.textContent('#handPreview')], ['true', 'Noi: +200Voi: 0']);
+  await p.click('#handSave');
+  eq('mano salvata senza chiusura', await p.evaluate(() => [window.__score.current.hands[0].v, window.__score.current.hands[0].d.chiusura]), [[200, 0], -1]);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();
