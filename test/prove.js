@@ -144,6 +144,12 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('#bAdd'); await fin(0).pressSequentially('٣٫٥'); await p.click('#handSave');
   eq('cifre arabe con la virgola araba "٣٫٥" → 3', await p.evaluate(() => window.__score.current.hands[2].v), [3, 0]);
 
+  console.log('\nRivincita: "Noi"/"Voi" non diventano nomi recenti');
+  const sco = {id: 'gs', type: 'scopa', players: pl(['Noi', 'Voi']), hands: [{v: [11, 3]}], target: 11, opts: {}, firstDealer: 0, started: '2026-11-15T10:00:00Z', ended: '2026-11-15T11:00:00Z', winners: [0]};
+  await load(null, [sco]);
+  await p.click('.tab[data-tab="history"]'); await p.click('[data-game-id="gs"]'); await p.click('#eAgain'); await p.click('#suGo');
+  eq('nomi recenti dopo la rivincita: nessuno', await p.evaluate(() => JSON.parse(localStorage.getItem('sc.players'))), []);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

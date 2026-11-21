@@ -347,7 +347,11 @@ function defaultNames(k){
 }
 function openSetup(k, from){
   const G=GAMES[k];
-  if(from){ draft={type:k, players:from.players.map(p=>({...p})), target:from.target, opts:{...from.opts}, firstDealer:((from.firstDealer||0)+1)%from.players.length}; }
+  if(from){
+    /* Rivincita: i nomi messi dall'app ("Noi", "Voi", "Giocatore 2"…) restano predefiniti, così non finiscono tra i nomi recenti */
+    const n=from.players.length, def=i=>[t('su.player',{n:i+1}), t('su.team',{n:i+1})].concat(G.team && n===2 ? [t(i===0?'su.us':'su.them')] : []);
+    draft={type:k, players:from.players.map((p,i)=>{ const q={...p}; delete q.auto; if(def(i).includes(String(p.name))) q.auto=true; return q; }), target:from.target, opts:{...from.opts}, firstDealer:((from.firstDealer||0)+1)%n};
+  }
   else draft={type:k, players:defaultNames(k).map((name,i)=>({name, color:COLORS[i%COLORS.length], auto:true})), target:G.target, opts:{low:false, reentry:false, dbl:false}, firstDealer:0};
   renderSetup(); show('setup');
 }
