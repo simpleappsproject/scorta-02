@@ -94,8 +94,8 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('#suOptions [data-target="50"]');
   await p.click('#suGo');
   const hand = async (a, b) => { await p.click('#bAdd'); await p.locator('#handBody input[data-in="v"]').nth(0).fill(String(a)); await p.locator('#handBody input[data-in="v"]').nth(1).fill(String(b)); await p.click('#handSave'); await p.waitForTimeout(150); };
-  await hand(20, 10); await hand(15, 25);
-  eq('totali sul tabellone', await p.evaluate(() => window.__score.current && window.__score.standings(window.__score.current).tot), [35, 35]);
+  await hand(20, 10); await hand('١٥', '۲۵');   // seconda mano scritta con cifre arabe e persiane (tastiere di quei paesi)
+  eq('totali sul tabellone (anche con cifre arabe/persiane: 15 e 25)', await p.evaluate(() => window.__score.current && window.__score.standings(window.__score.current).tot), [35, 35]);
   await hand(20, 5);
   eq('arrivata a 50: partita finita e nello storico', await p.evaluate(() => [window.__score.current, window.__score.games.length, window.__score.games[0].winners]), [null, 1, [0]]);
   await p.click('#toastUndo');

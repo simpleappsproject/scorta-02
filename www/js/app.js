@@ -1,5 +1,5 @@
 (function(){
-const VERSION = '1.2.8';
+const VERSION = '1.2.9';
 const $ = s => document.querySelector(s);
 const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -580,9 +580,11 @@ function renderPreview(){
   }
   $('#handPreview').innerHTML = g.players.map((p,i)=>`<span style="--c:${p.color}"><i></i>${esc(p.name)}: ${v[i]>0&&g.type!=='scala40'?'+':''}${num(v[i])}</span>`).join('');
 }
+/* cifre arabe, persiane, hindi e giapponesi (tastiere di quei paesi) → 0-9: prima venivano tolte e il campo restava vuoto */
+const latinDigits = v => String(v).replace(/[٠-٩۰-۹०-९０-９]/g, c => { const x=c.charCodeAt(0); return String(x>=0xff10?x-0xff10:x>=0x966?x-0x966:x>=0x6f0?x-0x6f0:x-0x660); });
 $('#handBody').addEventListener('input',e=>{
   const k=e.target.dataset.in; if(!k) return;
-  const i=+e.target.dataset.i; const clean=e.target.value.replace(/[^\d]/g,'').slice(0,5);
+  const i=+e.target.dataset.i; const clean=latinDigits(e.target.value).replace(/[^\d]/g,'').slice(0,5);
   if(clean!==e.target.value) e.target.value=clean;
   if(k==='v' && current.type==='briscola'){
     /* si scrive in un campo qualsiasi: si calcola da solo quello non toccato da più tempo */
