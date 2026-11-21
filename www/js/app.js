@@ -51,7 +51,8 @@ const isLow = g => g.type==='scala40' || (g.type==='free' && g.opts.low);
 /* Controllo di una partita (salvata, o letta da un backup): se è rovinata non deve bloccare l'app.
    normGame completa i campi mancanti senza cambiare i punti. */
 function validGame(g){
-  return !!(g && typeof g==='object' && GAMES[g.type] && Array.isArray(g.players) && g.players.length>=1 && g.players.length<=MAX_PLAYERS
+  return !!(g && typeof g==='object' && Object.prototype.hasOwnProperty.call(GAMES,g.type) &&   /* "constructor", "toString"… non sono giochi */
+    Array.isArray(g.players) && g.players.length>=1 && g.players.length<=MAX_PLAYERS
     && g.players.every(p=>p && typeof p.name==='string') && Array.isArray(g.hands) && g.hands.every(h=>h && Array.isArray(h.v)));
 }
 function normGame(g){
@@ -108,7 +109,7 @@ const isDark = () => settings.theme==='dark' || (settings.theme==='auto' && dark
 function applyTheme(){
   const r=document.documentElement;
   if(settings.theme==='auto') delete r.dataset.theme; else r.dataset.theme=settings.theme;
-  const acc = pro && ACCENTS[settings.accent] ? settings.accent : 'green';
+  const acc = pro && Object.prototype.hasOwnProperty.call(ACCENTS,settings.accent) ? settings.accent : 'green';
   if(acc==='green') delete r.dataset.accent; else r.dataset.accent=acc;
   const meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.content=ACCENTS[acc][isDark()?1:0];
   N.setBars(isDark());
@@ -826,7 +827,7 @@ function parseBackup(text){
   const s0 = (d.settings && typeof d.settings==='object') ? d.settings : {}, se={};
   if(s0.lang==='auto' || LANGS.includes(s0.lang)) se.lang=s0.lang;
   if(['auto','light','dark'].includes(s0.theme)) se.theme=s0.theme;
-  if(ACCENTS[s0.accent]) se.accent=s0.accent;
+  if(Object.prototype.hasOwnProperty.call(ACCENTS,s0.accent)) se.accent=s0.accent;
   if(typeof s0.awake==='boolean') se.awake=s0.awake;
   return {games:gs, current:cur, players:pl, settings:se, exported:typeof d.exported==='string'?d.exported:''};
 }

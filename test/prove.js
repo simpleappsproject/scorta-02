@@ -84,6 +84,8 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   eq('file qualsiasi rifiutato', await S('parseBackup', '{"a":1}'), null);
   const bk = await S('parseBackup', JSON.stringify({app: 'simple-score', version: 1, games: [{id: 'x"><b>', type: 'scopa', target: 11, players: [{name: '<i>Anna</i>', color: 'red;background:url(x)'}, {name: 'Ben', color: '#2457c5'}], hands: [{v: [3, 1]}]}], players: ['Anna', 5]}));
   eq('identificativo e colore strani sostituiti, nomi tenuti', [/^[A-Za-z0-9_-]+$/.test(bk.games[0].id), bk.games[0].players.map(x => x.color), bk.games[0].players[0].name, bk.players], [true, ['#17804f', '#2457c5'], '<i>Anna</i>', ['Anna']]);
+  const pk = await S('parseBackup', JSON.stringify({app: 'simple-score', version: 1, games: ['constructor', 'toString', 'scopa'].map((type, i) => ({id: 'g' + i, type, target: 11, players: [{name: 'A', color: '#17804f'}, {name: 'B', color: '#2457c5'}], hands: [{v: [1, 0]}]}))}));
+  eq('partite con tipo "constructor"/"toString" (nomi interni di JavaScript) scartate', pk && pk.games.map(g => g.type), ['scopa']);
   const csv = await p.evaluate(() => window.__score.buildCSV([{type: 'free', players: [{name: '=1+1'}, {name: 'Ben; e "Co"'}], hands: [{v: [3, 4]}, {v: [5, -1]}], target: 0, opts: {}, started: '2026-11-15T10:00:00Z', winners: [0]}], ';'));
   const lines = csv.replace(/^﻿/, '').trim().split(/\r?\n/);
   eq('CSV: una riga per mano, totali progressivi, formule e separatori protetti', [lines.length, lines[2].split(';').slice(4).join(';')], [3, "'=1+1;5;8;\"Ben; e \"\"Co\"\"\";-1;3;'=1+1"]);
