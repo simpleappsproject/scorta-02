@@ -134,6 +134,16 @@ const G = (type, n, hands, extra) => Object.assign({id: 'g', type, players: P(n)
   await p.click('.tile .dealer');
   eq('all\'inizio dell\'animazione l\'avviso è già centrato', await p.evaluate(() => { const el = document.querySelector('#toast'); el.getAnimations().forEach(a => { a.pause(); a.currentTime = 0; }); const r = el.getBoundingClientRect(); return Math.round(r.left + r.width / 2) === Math.round(innerWidth / 2); }), true);
 
+  console.log('\nLibera: segno meno e virgola scritti nel campo');
+  await p.click('#bAdd');
+  const fin = i => p.locator('#handBody input[data-in="v"]').nth(i);
+  await fin(0).pressSequentially('12,5'); await fin(1).pressSequentially('-7');
+  eq('"12,5" → 12 con l\'avviso "Solo numeri interi"; "-7" accende il tasto meno', [await fin(0).inputValue(), await p.textContent('#toastText'), await p.getAttribute('[data-sign="1"]', 'aria-pressed')], ['12', 'Solo numeri interi', 'true']);
+  await p.click('#handSave');
+  eq('mano salvata: 12 e −7', await p.evaluate(() => window.__score.current.hands[1].v), [12, -7]);
+  await p.click('#bAdd'); await fin(0).pressSequentially('٣٫٥'); await p.click('#handSave');
+  eq('cifre arabe con la virgola araba "٣٫٥" → 3', await p.evaluate(() => window.__score.current.hands[2].v), [3, 0]);
+
   eq('nessun errore in console', errors, []);
 
   await browser.close(); srv.close();

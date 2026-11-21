@@ -589,8 +589,19 @@ function renderPreview(){
 const latinDigits = v => String(v).replace(/[٠-٩۰-۹०-९０-９]/g, c => { const x=c.charCodeAt(0); return String(x>=0xff10?x-0xff10:x>=0x966?x-0x966:x>=0x6f0?x-0x6f0:x-0x660); });
 $('#handBody').addEventListener('input',e=>{
   const k=e.target.dataset.in; if(!k) return;
-  const i=+e.target.dataset.i; const clean=latinDigits(e.target.value).replace(/[^\d]/g,'').slice(0,5);
-  if(clean!==e.target.value) e.target.value=clean;
+  const i=+e.target.dataset.i; let clean=latinDigits(e.target.value).replace(/[^\d]/g,'').slice(0,5);
+  if(k==='v' && current.type==='free'){
+    /* Libera: "-7" accende il tasto del segno meno; "12,5" vale 12 (la virgola e i decimali restano nel campo finché non si esce, poi spariscono) */
+    const raw=latinDigits(e.target.value), m=raw.search(/[.,\u066b]/), sign=e.target.parentNode.querySelector('[data-sign]');
+    if(/[-\u2212]/.test(raw) && !hd.neg[i]){ hd.neg[i]=true; if(sign) sign.setAttribute('aria-pressed','true'); }
+    if(m>=0){
+      const int=raw.slice(0,m).replace(/[^\d]/g,'').slice(0,5);
+      if(!/[.,\u066b]/.test(e.target._shown||'')) toast(t('hand.intOnly'));
+      clean=int; e.target.value=int+raw[m]+raw.slice(m+1).replace(/[^\d]/g,'').slice(0,3);
+    } else if(clean!==e.target.value) e.target.value=clean;
+    e.target._shown=e.target.value;
+  }
+  else if(clean!==e.target.value) e.target.value=clean;
   if(k==='v' && current.type==='briscola'){
     /* si scrive in un campo qualsiasi: si calcola da solo quello non toccato da più tempo */
     const n=current.players.length, c=clean.slice(0,3);
@@ -606,6 +617,7 @@ $('#handBody').addEventListener('input',e=>{
   renderPreview();
 });
 $('#handBody').addEventListener('change',e=>{
+  if(e.target.dataset.in==='v' && /[.,\u066b]/.test(e.target.value)){ e.target.value=e.target.value.split(/[.,\u066b]/)[0]; e.target._shown=e.target.value; }   // Libera: via i decimali scritti
   if(e.target.dataset.pozz!=null){ hd.pozz[+e.target.dataset.pozz]=e.target.checked; renderPreview(); }
   if(e.target.dataset.dbl!=null){ hd.dbl=e.target.checked; renderPreview(); }
 });
