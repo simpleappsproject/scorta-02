@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN FRANCESE (fr-FR)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score : Compte-points
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Compteur de points pour jeux de cartes et de société. Sans pub, hors ligne.
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score compte les points pendant vos soirées jeux. Plus de papier ni de crayon, plus d’erreurs de calcul, et pas de pub après chaque point.
+
+DES SCORES GRANDS ET CLAIRS
+Tous les joueurs à l’écran avec de grands chiffres, leur place au classement et qui distribue : le donneur change tout seul à chaque manche.
+
+DES JEUX PRÊTS À L’EMPLOI
+• Libre : pour n’importe quel jeu de cartes ou de société, avec ou sans objectif, y compris « le plus petit score gagne » (ex. Uno, Dame de pique).
+• Des jeux de cartes italiens avec les règles déjà prêtes : Scopa et Briscola gratuits, Burraco et Scala 40 avec Pro. Calcul guidé : l’appli fait les additions.
+• Scopa : touchez qui a le plus de cartes, le plus de deniers, le settebello et la primiera, puis ajoutez les scopas. C’est fait.
+• Briscola : saisissez les points d’un camp, l’autre se calcule tout seul (120 au total). Manches gagnées et points ; une seule manche, 2 sur 3 ou 3 sur 5 ; à deux, à trois ou en équipes de deux.
+
+UNE ERREUR ? ÇA SE CORRIGE
+Touchez une manche dans le tableau et modifiez-la : tous les totaux se mettent à jour. Vous pouvez aussi retirer la dernière manche.
+
+RIEN NE SE PERD
+La partie est enregistrée après chaque manche : si vous fermez l’appli ou recevez un appel, vous reprenez là où vous en étiez. L’écran reste allumé pendant la partie.
+
+FIN DE PARTIE
+Gagnant, classement, graphique du déroulé de la partie et revanche avec les mêmes joueurs en un seul geste.
+
+AUCUNE DISTRACTION
+Pas de pub, pas de compte, pas d’abonnement. Fonctionne hors ligne et vos données restent sur votre téléphone.
+
+SIMPLE SCORE PRO
+Un seul achat débloque :
+• Burraco et Scala 40 avec calcul guidé
+• jusqu’à 12 joueurs ou équipes (gratuit : jusqu’à 6)
+• historique complet et statistiques par joueur (gratuit : les 5 dernières parties)
+• dés virtuels et 6 couleurs pour l’appli
+
+Thème clair et sombre. En 14 langues.

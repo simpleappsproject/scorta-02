@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN CINESE SEMPLIFICATO (zh-CN)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score：记分板
+
+DESCRIZIONE BREVE (max 80 caratteri)
+纸牌和桌游计分器。大号数字，离线使用，无广告。
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score 帮你在聚会玩牌、玩桌游时记分。不用纸笔，不会算错，也不会每记一分就弹出广告。
+
+大号数字，一目了然
+所有玩家都显示在屏幕上：大号分数、当前名次，以及下一个发牌的人。每轮庄家会自动轮换。
+
+现成的游戏
+• 自由计分：适用于任何纸牌游戏或桌游，可设目标分也可不设，也支持“分低者胜”（如 Uno、红心大战）。
+• 规则已内置的意大利纸牌游戏：Scopa 和 Briscola 免费，Burraco 和 Scala 40 属于 Pro。引导计分，加法交给应用。
+• Scopa：点选谁的牌最多、金币最多、谁拿到金七和 primiera，再加上扫牌次数，就完成了。
+• Briscola：输入一方的分数，另一方自动算出（总共 120 分）。记录赢的轮数和分数；一轮定胜负、三轮两胜或五轮三胜；两人、三人或两两组队。
+
+记错了？改过来就行
+点按表格中的任意一轮即可修改，所有总分都会更新。也可以删除最后一轮。
+
+什么都不会丢
+每轮结束后自动保存：关掉应用或来电话了，回来接着玩。对局期间屏幕常亮。
+
+对局结束
+显示赢家、排名和对局走势图，一键与同样的玩家再战一局。
+
+不受打扰
+无广告，无需账号，无订阅。离线可用，数据只保存在你的手机上。
+
+SIMPLE SCORE PRO
+一次购买即可解锁：
+• 带引导计分的 Burraco 和 Scala 40
+• 最多 12 位玩家或队伍（免费版最多 6 位）
+• 完整历史和每位玩家的统计（免费版显示最近 5 局）
+• 虚拟骰子和 6 种应用颜色
+
+浅色和深色主题。支持 14 种语言。

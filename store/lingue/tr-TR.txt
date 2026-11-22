@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN TURCO (tr-TR)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score: Skor Tutucu
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Kart ve masa oyunları için skor tutucu. Büyük rakamlar, reklamsız, çevrimdışı.
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score oyun akşamlarında skoru tutar. Kâğıt kaleme, hesap hatalarına ve her puandan sonra çıkan reklamlara gerek yok.
+
+BÜYÜK VE NET SKORLAR
+Tüm oyuncular büyük rakamlarla ekranda; sıralamaları ve sıradaki dağıtan da görünür: dağıtan her elde kendiliğinden değişir.
+
+HAZIR OYUNLAR
+• Serbest: her türlü kart veya masa oyunu için, hedefli ya da hedefsiz, “en düşük puan kazanır” seçeneğiyle de (ör. Uno, Hearts).
+• Kuralları hazır İtalyan kart oyunları: Scopa ve Briscola ücretsiz, Burraco ve Scala 40 Pro ile. Rehberli puan hesaplama: toplamaları uygulama yapar.
+• Scopa: en çok kartı, en çok karoyu, settebello'yu ve primiera'yı kimin aldığına dokun, süpürmeleri ekle. Bu kadar.
+• Briscola: bir tarafın puanını yaz, diğeri kendiliğinden hesaplanır (toplam 120). Kazanılan eller ve puanlar; tek el, 3'te 2 veya 5'te 3; iki kişi, üç kişi ya da eşli.
+
+YANLIŞ MI GİRDİN? DÜZELTİLİR
+Tablodaki herhangi bir ele dokun ve değiştir: tüm toplamlar güncellenir. Son eli de silebilirsin.
+
+HİÇBİR ŞEY KAYBOLMAZ
+Oyun her elden sonra kaydedilir: uygulamayı kapatsan da telefon çalsa da kaldığın yerden devam edersin. Oyun boyunca ekran açık kalır.
+
+OYUN SONU
+Kazanan, sıralama, oyunun gidişatını gösteren grafik ve tek dokunuşla aynı oyuncularla rövanş.
+
+DİKKAT DAĞITAN HİÇBİR ŞEY YOK
+Reklam yok, hesap yok, abonelik yok. Çevrimdışı çalışır, verilerin telefonunda kalır.
+
+SIMPLE SCORE PRO
+Tek seferlik satın almayla açılır:
+• rehberli puan hesaplamalı Burraco ve Scala 40
+• 12'ye kadar oyuncu veya takım (ücretsiz: 6'ya kadar)
+• tüm geçmiş ve oyuncu başına istatistikler (ücretsiz: son 5 oyun)
+• sanal zar ve 6 uygulama rengi
+
+Açık ve koyu tema. 14 dilde.

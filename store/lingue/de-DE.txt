@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN TEDESCO (de-DE)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score: Punktezähler
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Punktezähler für Karten- und Brettspiele. Große Zahlen, ohne Werbung, offline.
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score zählt die Punkte beim Spieleabend. Kein Zettel und Stift, keine Rechenfehler, keine Werbung nach jedem Punkt.
+
+GROSSE, KLARE PUNKTESTÄNDE
+Alle Spieler auf dem Bildschirm mit großen Zahlen, ihrer Platzierung und wer als Nächstes gibt: Der Geber wechselt jede Runde von selbst.
+
+FERTIGE SPIELE
+• Frei: für jedes Karten- oder Brettspiel, mit oder ohne Ziel, auch „Wenigste Punkte gewinnen“ (z. B. Uno, Hearts).
+• Italienische Kartenspiele mit fertigen Regeln: Scopa und Briscola kostenlos, Burraco und Scala 40 mit Pro. Geführte Zählung: Die App rechnet für dich.
+• Scopa: Tippe an, wer die meisten Karten, die meisten Münzen, den Settebello und die Primiera hat, und trage die Scopas ein. Fertig.
+• Briscola: Gib die Punkte einer Seite ein, die andere rechnet sich selbst aus (120 insgesamt). Gewonnene Runden und Punkte; eine Runde, 2 aus 3 oder 3 aus 5; zu zweit, zu dritt oder paarweise.
+
+VERTIPPT? EINFACH KORRIGIEREN
+Tippe in der Tabelle auf eine Runde und ändere sie: Alle Summen werden aktualisiert. Du kannst auch die letzte Runde entfernen.
+
+NICHTS GEHT VERLOREN
+Das Spiel wird nach jeder Runde gespeichert: Schließt du die App oder kommt ein Anruf, machst du einfach dort weiter. Der Bildschirm bleibt während des Spiels an.
+
+SPIELENDE
+Sieger, Rangliste, ein Diagramm zum Spielverlauf und mit einem Tippen die Revanche mit denselben Spielern.
+
+KEINE ABLENKUNG
+Keine Werbung, kein Konto, kein Abo. Funktioniert offline und deine Daten bleiben auf deinem Handy.
+
+SIMPLE SCORE PRO
+Mit einem einzigen Kauf schaltest du frei:
+• Burraco und Scala 40 mit geführter Zählung
+• bis zu 12 Spieler oder Teams (kostenlos: bis zu 6)
+• ganzer Verlauf und Statistik pro Spieler (kostenlos: die letzten 5 Spiele)
+• virtuelle Würfel und 6 App-Farben
+
+Helles und dunkles Design. In 14 Sprachen.

@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN SPAGNOLO (es-ES)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score: Marcador
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Marcador de puntos para juegos de cartas y de mesa. Sin anuncios, sin conexión.
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score lleva el marcador en tus noches de juegos. Sin papel ni boli, sin errores en las cuentas y sin anuncios después de cada punto.
+
+PUNTUACIÓN GRANDE Y CLARA
+Todos los jugadores en pantalla con números grandes, su posición y quién reparte: el turno de repartir cambia solo en cada ronda.
+
+JUEGOS LISTOS PARA USAR
+• Libre: para cualquier juego de cartas o de mesa, con o sin objetivo, también «gana quien tenga menos puntos» (p. ej. Uno, Corazones).
+• Juegos de cartas italianos con las reglas ya preparadas: Scopa y Briscola gratis, Burraco y Scala 40 con Pro. Conteo guiado: las sumas las hace la app.
+• Scopa: toca quién se llevó más cartas, más oros, el settebello y la primiera, y añade las escobas. Listo.
+• Briscola: escribe los puntos de un lado y el otro se calcula solo (120 en total). Rondas ganadas y puntos; única, 2 de 3 o 3 de 5; para dos, para tres o por parejas.
+
+¿TE HAS EQUIVOCADO? SE CORRIGE
+Toca cualquier ronda en la tabla y cámbiala: todos los totales se actualizan. También puedes quitar la última ronda.
+
+NO SE PIERDE NADA
+La partida se guarda después de cada ronda: si cierras la app o te llaman, sigues donde lo dejaste. La pantalla se queda encendida mientras juegas.
+
+FIN DE LA PARTIDA
+Ganador, clasificación, gráfico de cómo fue la partida y revancha con los mismos jugadores en un toque.
+
+SIN DISTRACCIONES
+Sin anuncios, sin cuenta, sin suscripción. Funciona sin conexión y los datos se quedan en tu teléfono.
+
+SIMPLE SCORE PRO
+Con una sola compra desbloqueas:
+• Burraco y Scala 40 con conteo guiado
+• hasta 12 jugadores o equipos (gratis hasta 6)
+• historial completo y estadísticas por jugador (gratis las últimas 5 partidas)
+• dados virtuales y 6 colores para la app
+
+Tema claro y oscuro. En 14 idiomas.

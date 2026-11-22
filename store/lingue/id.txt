@@ -1,0 +1,41 @@
+SIMPLE SCORE – SCHEDA DEL PLAY STORE IN INDONESIANO (id)
+(copia e incolla in Play Console > Crescita > Presenza sullo Store > Scheda principale dello Store > Gestisci le traduzioni)
+
+NOME APP (max 30 caratteri)
+Simple Score: Pencatat Skor
+
+DESCRIZIONE BREVE (max 80 caratteri)
+Pencatat skor untuk permainan kartu dan papan. Angka besar, tanpa iklan.
+
+DESCRIZIONE COMPLETA (max 4000 caratteri)
+Simple Score mencatat skor saat main bareng keluarga atau teman. Tanpa kertas dan pulpen, tanpa salah hitung, tanpa iklan setiap kali ada poin.
+
+SKOR BESAR DAN JELAS
+Semua pemain tampil di layar dengan angka besar, peringkatnya, dan siapa yang membagi kartu berikutnya: pembagi berganti otomatis setiap ronde.
+
+PERMAINAN SIAP PAKAI
+• Bebas: untuk permainan kartu atau papan apa saja, dengan atau tanpa target, termasuk “skor terendah menang” (mis. Uno, Hearts).
+• Permainan kartu Italia dengan aturan yang sudah siap: Scopa dan Briscola gratis, Burraco dan Scala 40 dengan Pro. Hitungan terpandu: aplikasi yang menjumlahkan.
+• Scopa: ketuk siapa yang dapat kartu terbanyak, koin terbanyak, settebello, dan primiera, lalu tambahkan sapuan. Selesai.
+• Briscola: masukkan poin satu pihak, pihak lain terhitung sendiri (total 120). Ronde yang dimenangkan dan poin; satu ronde, 2 dari 3, atau 3 dari 5; berdua, bertiga, atau berpasangan.
+
+SALAH MASUKKAN? BISA DIPERBAIKI
+Ketuk ronde mana saja di tabel dan ubah: semua total ikut diperbarui. Anda juga bisa menghapus ronde terakhir.
+
+TIDAK ADA YANG HILANG
+Permainan tersimpan setelah setiap ronde: kalau aplikasi ditutup atau ada telepon masuk, lanjutkan dari posisi terakhir. Layar tetap menyala selama permainan.
+
+AKHIR PERMAINAN
+Pemenang, peringkat, grafik jalannya permainan, dan tanding ulang dengan pemain yang sama dalam satu ketukan.
+
+TANPA GANGGUAN
+Tanpa iklan, tanpa akun, tanpa langganan. Berfungsi offline dan data tetap di ponsel Anda.
+
+SIMPLE SCORE PRO
+Sekali beli untuk membuka:
+• Burraco dan Scala 40 dengan hitungan terpandu
+• hingga 12 pemain atau tim (gratis hingga 6)
+• riwayat lengkap dan statistik per pemain (gratis: 5 permainan terakhir)
+• dadu virtual dan 6 warna aplikasi
+
+Tema terang dan gelap. Tersedia dalam 14 bahasa.
