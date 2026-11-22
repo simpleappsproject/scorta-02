@@ -81,7 +81,7 @@ jobs:
           } >> "$S"
           T=$("$BT/aapt2" dump badging "$APK" 2>/dev/null | sed -n "s/^targetSdkVersion:'\([0-9]*\)'/\1/p")
           if [ "${T:-0}" -ge 36 ]; then echo "- Android di destinazione: $T ✅" >> "$S"; else echo "- Android di destinazione: $T ❌ (serve 36)" >> "$S"; fi
-          FILES="$APK $(ls android/app/build/outputs/bundle/release/*.aab 2>/dev/null)"
+          FILES="$APK $(ls android/app/build/outputs/bundle/release/*.aab 2>/dev/null || true)"
           SO=$(for f in $FILES; do unzip -l "$f" | grep -E '\.so$' || true; done)
           if [ -z "$SO" ]; then echo "- Librerie native (.so): nessuna, requisito 16 KB soddisfatto ✅" >> "$S"
           else echo "- Librerie native (.so) trovate: controllare l'allineamento a 16 KB ⚠️" >> "$S"; echo '```' >> "$S"; echo "$SO" >> "$S"; echo '```' >> "$S"; fi
