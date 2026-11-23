@@ -1,0 +1,6 @@
+Caratteri dei titoli degli screenshot dello store nelle altre lingue (non sono nell'app).
+Da Google Fonts tramite @fontsource, licenza SIL Open Font License 1.1 (testo in LICENSE-OFL.txt):
+- Oswald 700 (cyrillic): titoli in russo
+- Teko 700 (devanagari): titoli in hindi
+- Noto Kufi Arabic 900 (arabic): titoli in arabo
+Il latino (anche turco) usa Big Shoulders Display di www/fonts; cinese, giapponese e coreano Noto Sans CJK installato sul computer.
